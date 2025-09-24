@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Package, Plus, Search } from 'lucide-react';
-import { purchasesAPI } from '../services/api';
+import React, { useState, useEffect } from "react";
+import { ShoppingCart, Package, Plus, Search } from "lucide-react";
+import { purchasesAPI } from "../services/api";
+import PurchaseDetailModal from "../components/PurchaseDetailModal";
+import PurchaseForm from "../components/PurchaseForm";
 
 const Purchases = () => {
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedPurchase, setSelectedPurchase] = useState(null);
+  const [editingPurchase, setEditingPurchase] = useState(null);
 
   useEffect(() => {
     loadPurchases();
@@ -19,34 +25,65 @@ const Purchases = () => {
         setPurchases(response.data);
       }
     } catch (error) {
-      console.error('Error al cargar compras:', error);
+      console.error("Error al cargar compras:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleCreatePurchase = async (purchaseData) => {
+    try {
+      const response = await purchasesAPI.createPurchase(purchaseData);
+      if (response.success) {
+        setPurchases((prev) => [...prev, response.data]);
+        setShowForm(false);
+      }
+    } catch (error) {
+      console.error("Error al crear compra:", error);
+    }
+  };
+
+  const handleUpdatePurchase = async (purchaseData) => {
+    try {
+      const response = await purchasesAPI.updatePurchase(
+        editingPurchase.id,
+        purchaseData
+      );
+      if (response.success) {
+        setPurchases((prev) =>
+          prev.map((p) => (p.id === editingPurchase.id ? response.data : p))
+        );
+        setShowForm(false);
+        setEditingPurchase(null);
+      }
+    } catch (error) {
+      console.error("Error al actualizar compra:", error);
+    }
+  };
+
   const getStatusColor = (estado) => {
     const colors = {
-      'aprobado': 'bg-green-100 text-green-800',
-      'pendiente': 'bg-yellow-100 text-yellow-800',
-      'rechazado': 'bg-red-100 text-red-800'
+      aprobado: "bg-green-100 text-green-800",
+      pendiente: "bg-yellow-100 text-yellow-800",
+      rechazado: "bg-red-100 text-red-800",
     };
-    return colors[estado] || 'bg-gray-100 text-gray-800';
+    return colors[estado] || "bg-gray-100 text-gray-800";
   };
 
   const getCategoryColor = (categoria) => {
     const colors = {
-      'software': 'bg-blue-100 text-blue-800',
-      'hardware': 'bg-purple-100 text-purple-800',
-      'servicios': 'bg-indigo-100 text-indigo-800',
-      'materiales': 'bg-orange-100 text-orange-800'
+      software: "bg-blue-100 text-blue-800",
+      hardware: "bg-purple-100 text-purple-800",
+      servicios: "bg-indigo-100 text-indigo-800",
+      materiales: "bg-orange-100 text-orange-800",
     };
-    return colors[categoria] || 'bg-gray-100 text-gray-800';
+    return colors[categoria] || "bg-gray-100 text-gray-800";
   };
 
-  const filteredPurchases = purchases.filter(purchase =>
-    purchase.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.proveedor.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPurchases = purchases.filter(
+    (purchase) =>
+      purchase.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      purchase.proveedor.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -62,12 +99,17 @@ const Purchases = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Gestión de Compras</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Gestión de Compras
+          </h1>
           <p className="mt-1 text-sm text-gray-600">
             Administra compras y suministros para tus proyectos
           </p>
         </div>
-        <button className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors">
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+        >
           <Plus className="w-4 h-4 mr-2" />
           Nueva Compra
         </button>
@@ -81,12 +123,14 @@ const Purchases = () => {
               <ShoppingCart className="w-6 h-6 text-orange-600" />
             </div>
             <div className="ml-4">
-              <div className="text-2xl font-bold text-gray-900">{purchases.length}</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {purchases.length}
+              </div>
               <div className="text-sm text-gray-600">Total Compras</div>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
@@ -94,13 +138,13 @@ const Purchases = () => {
             </div>
             <div className="ml-4">
               <div className="text-2xl font-bold text-gray-900">
-                {purchases.filter(p => p.estado === 'aprobado').length}
+                {purchases.filter((p) => p.estado === "aprobado").length}
               </div>
               <div className="text-sm text-gray-600">Aprobadas</div>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
@@ -108,13 +152,13 @@ const Purchases = () => {
             </div>
             <div className="ml-4">
               <div className="text-2xl font-bold text-gray-900">
-                {purchases.filter(p => p.estado === 'pendiente').length}
+                {purchases.filter((p) => p.estado === "pendiente").length}
               </div>
               <div className="text-sm text-gray-600">Pendientes</div>
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
@@ -122,7 +166,10 @@ const Purchases = () => {
             </div>
             <div className="ml-4">
               <div className="text-2xl font-bold text-gray-900">
-                ${purchases.reduce((sum, p) => sum + p.monto, 0).toLocaleString()}
+                $
+                {purchases
+                  .reduce((sum, p) => sum + p.monto, 0)
+                  .toLocaleString()}
               </div>
               <div className="text-sm text-gray-600">Valor Total</div>
             </div>
@@ -151,13 +198,14 @@ const Purchases = () => {
             <ShoppingCart className="w-12 h-12 text-gray-400" />
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {searchTerm ? 'No se encontraron compras' : 'No hay compras registradas'}
+            {searchTerm
+              ? "No se encontraron compras"
+              : "No hay compras registradas"}
           </h3>
           <p className="text-gray-600 mb-4">
-            {searchTerm 
-              ? 'Intenta con otros términos de búsqueda' 
-              : 'Comienza registrando tu primera compra'
-            }
+            {searchTerm
+              ? "Intenta con otros términos de búsqueda"
+              : "Comienza registrando tu primera compra"}
           </p>
           {!searchTerm && (
             <button className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors">
@@ -197,14 +245,21 @@ const Purchases = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredPurchases.map((purchase) => (
-                  <tr key={purchase.id} className="hover:bg-gray-50 transition-colors">
+                  <tr
+                    key={purchase.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {purchase.descripcion}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getCategoryColor(purchase.categoria)}`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getCategoryColor(
+                          purchase.categoria
+                        )}`}
+                      >
                         {purchase.categoria}
                       </span>
                     </td>
@@ -224,15 +279,31 @@ const Purchases = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(purchase.estado)}`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getStatusColor(
+                          purchase.estado
+                        )}`}
+                      >
                         {purchase.estado}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button className="text-indigo-600 hover:text-indigo-900 transition-colors mr-3">
+                      <button
+                        onClick={() => {
+                          setSelectedPurchase(purchase);
+                          setShowDetailModal(true);
+                        }}
+                        className="text-indigo-600 hover:text-indigo-900 transition-colors mr-3"
+                      >
                         Ver
                       </button>
-                      <button className="text-green-600 hover:text-green-900 transition-colors">
+                      <button
+                        onClick={() => {
+                          setEditingPurchase(purchase);
+                          setShowForm(true);
+                        }}
+                        className="text-green-600 hover:text-green-900 transition-colors"
+                      >
                         Editar
                       </button>
                     </td>
@@ -242,6 +313,30 @@ const Purchases = () => {
             </table>
           </div>
         </div>
+      )}
+
+      {/* Modals */}
+      {showDetailModal && (
+        <PurchaseDetailModal
+          purchase={selectedPurchase}
+          onClose={() => {
+            setShowDetailModal(false);
+            setSelectedPurchase(null);
+          }}
+        />
+      )}
+
+      {showForm && (
+        <PurchaseForm
+          onSubmit={
+            editingPurchase ? handleUpdatePurchase : handleCreatePurchase
+          }
+          onCancel={() => {
+            setShowForm(false);
+            setEditingPurchase(null);
+          }}
+          initialData={editingPurchase}
+        />
       )}
     </div>
   );
