@@ -50,3 +50,37 @@ Incidencias detectadas y corregidas:
 2. Formato de moneda incorrecto en la exportación de datos:
    - Se detectaron inconsistencias en la representación del valor monetario exportado.
    - Estado: Corregido
+
+# SPRINT 03
+
+Durante este sprint se realizó la validación integral del módulo Planificar Proyecto, con el objetivo de asegurar el correcto comportamiento en la asignación de responsables, manejo de presupuestos y generación de mensajes de error claros.
+
+Casos de prueba ejecutados:
+
+1. Flujo principal de planificación
+2. Validación de campos obligatorios
+3. Asignación de responsables registrados
+4. Validación del presupuesto asignado
+5. Verificación de duplicidad en proyectos planificados
+
+Resultados: 4 de 5 casos superados satisfactoriamente
+Cobertura de pruebas: 80%
+
+Incidencias detectadas:
+
+1. Presupuesto excedente permitido en determinados casos
+
+   - El sistema permitía planificar proyectos con montos superiores al presupuesto aprobado.
+
+   - Estado: En progreso
+
+2. Asignación de usuarios inactivos como responsables
+
+   - Se permitía seleccionar y asignar usuarios inactivos en la planificación.
+
+   - Estado: Corregido
+
+3. Mensaje de error duplicado poco claro
+
+   - La retroalimentación al usuario ante errores no era suficientemente clara.
+   - Estado: Corregido
