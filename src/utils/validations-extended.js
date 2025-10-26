@@ -18,14 +18,10 @@ export const validatePassword = (password) => {
 };
 
 export const validateRequired = (value) => {
-<<<<<<< HEAD
-  return value && value.toString().trim() !== "";
-=======
   if (value === null || value === undefined) {
     return false;
   }
   return value.toString().trim() !== "";
->>>>>>> featureOmar
 };
 
 export const validateNumber = (value) => {
@@ -102,7 +98,6 @@ export const validateBudget = (budget) => {
     errors,
   };
 };
-<<<<<<< HEAD
 
 export const validateReport = (report) => {
   const errors = {};
@@ -111,15 +106,18 @@ export const validateReport = (report) => {
     errors.titulo = "El título del reporte es obligatorio";
   }
 
-  if (!validateRequired(report.tipo)) {
-    errors.tipo = "El tipo de reporte es obligatorio";
+  if (!report.tipo || !["mensual", "avance", "final"].includes(report.tipo)) {
+    errors.tipo = "El tipo debe ser mensual, avance o final";
   }
 
   if (!report.proyectoId) {
     errors.proyectoId = "Debe seleccionar un proyecto";
   }
 
-  if (report.progreso < 0 || report.progreso > 100) {
+  if (
+    report.progreso !== undefined &&
+    (report.progreso < 0 || report.progreso > 100)
+  ) {
     errors.progreso = "El progreso debe estar entre 0 y 100";
   }
 
@@ -169,12 +167,18 @@ export const validateStrategy = (strategy) => {
     errors.descripcion = "La descripción es obligatoria";
   }
 
-  if (!validateRequired(strategy.tipo)) {
-    errors.tipo = "El tipo de estrategia es obligatorio";
+  if (
+    !strategy.tipo ||
+    !["proceso", "tecnologia", "recursos"].includes(strategy.tipo)
+  ) {
+    errors.tipo = "El tipo debe ser proceso, tecnologia o recursos";
   }
 
-  if (!validateRequired(strategy.prioridad)) {
-    errors.prioridad = "La prioridad es obligatoria";
+  if (
+    !strategy.prioridad ||
+    !["baja", "media", "alta"].includes(strategy.prioridad)
+  ) {
+    errors.prioridad = "La prioridad debe ser baja, media o alta";
   }
 
   if (!strategy.proyectoId) {
@@ -227,5 +231,3 @@ export const validateQuotation = (quotation) => {
     errors,
   };
 };
-=======
->>>>>>> featureOmar

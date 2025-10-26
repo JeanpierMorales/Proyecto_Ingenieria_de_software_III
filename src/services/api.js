@@ -253,6 +253,7 @@ export const budgetsAPI = {
     MOCK_BUDGETS.push(newBudget);
     return { success: true, data: newBudget };
   },
+<<<<<<< HEAD
 
   async updateBudget(id, budget) {
     await simulateNetworkDelay();
@@ -272,6 +273,8 @@ export const budgetsAPI = {
     }
     return { success: false, message: "Presupuesto no encontrado" };
   },
+=======
+>>>>>>> featureOmar
 };
 
 // API de Reportes
@@ -287,6 +290,11 @@ export const reportsAPI = {
       ...report,
       id: Math.max(...MOCK_REPORTS.map((r) => r.id)) + 1,
       fechaCreacion: new Date().toISOString().split("T")[0],
+<<<<<<< HEAD
+=======
+      estado: "borrador",
+      progreso: 0,
+>>>>>>> featureOmar
     };
     MOCK_REPORTS.push(newReport);
     return { success: true, data: newReport };
@@ -301,6 +309,7 @@ export const reportsAPI = {
     }
     return { success: false, message: "Reporte no encontrado" };
   },
+<<<<<<< HEAD
 
   async getReport(id) {
     await simulateNetworkDelay();
@@ -320,6 +329,8 @@ export const reportsAPI = {
       data: MOCK_REPORTS,
     };
   },
+=======
+>>>>>>> featureOmar
 };
 
 // API de Usuarios
@@ -348,6 +359,7 @@ export const purchasesAPI = {
     await simulateNetworkDelay();
     return { success: true, data: MOCK_PURCHASES };
   },
+<<<<<<< HEAD
 
   async createPurchase(purchase) {
     await simulateNetworkDelay();
@@ -379,6 +391,8 @@ export const purchasesAPI = {
     }
     return { success: false, message: "Compra no encontrada" };
   },
+=======
+>>>>>>> featureOmar
 };
 
 // API de Estrategias
@@ -387,6 +401,7 @@ export const strategiesAPI = {
     await simulateNetworkDelay();
     return { success: true, data: MOCK_STRATEGIES };
   },
+<<<<<<< HEAD
 
   async createStrategy(strategy) {
     await simulateNetworkDelay();
@@ -418,6 +433,8 @@ export const strategiesAPI = {
     }
     return { success: false, message: "Estrategia no encontrada" };
   },
+=======
+>>>>>>> featureOmar
 };
 
 // API de Cotizaciones
@@ -426,6 +443,7 @@ export const quotationsAPI = {
     await simulateNetworkDelay();
     return { success: true, data: MOCK_QUOTATIONS };
   },
+<<<<<<< HEAD
 
   async createQuotation(quotation) {
     await simulateNetworkDelay();
@@ -479,6 +497,8 @@ export const quotationsAPI = {
     }
     return { success: false, message: "Cotización no encontrada" };
   },
+=======
+>>>>>>> featureOmar
 };
 
 // TODO: Integración futura con backend Node/Express + MySQL
