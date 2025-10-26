@@ -1,0 +1,57 @@
+config:
+  target: "http://localhost:3000" # URL del frontend (ajustar según sea necesario)
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "Calentamiento"
+    - duration: 120
+      arrivalRate: 50
+      name: "Carga normal"
+    - duration: 60
+      arrivalRate: 100
+      name: "Estrés"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Navegación Dashboard"
+    weight: 30
+    flow:
+      - get:
+          url: "/"
+
+  - name: "Obtener proyectos"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/projects"
+
+  - name: "Crear proyecto"
+    weight: 15
+    flow:
+      - post:
+          url: "/api/projects"
+          json:
+            nombre: "Proyecto de Rendimiento {{ $randomString() }}"
+            descripcion: "Prueba de carga automática"
+            presupuesto: "{{ $randomInt(10000, 100000) }}"
+            fechaInicio: "2024-01-01"
+
+  - name: "Obtener presupuestos"
+    weight: 15
+    flow:
+      - get:
+          url: "/api/budgets"
+
+  - name: "Obtener reportes"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/reports"
+
+  - name: "Obtener usuarios"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/users"
