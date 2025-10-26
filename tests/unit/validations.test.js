@@ -22,7 +22,7 @@ const logResult = (testName, passed, error = null) => {
 };
 
 describe("Validaciones Unitarias", () => {
-  describe("validateEmail", () => {
+  describe("🧩 CP_001 – validateEmail (válido)", () => {
     test("debe validar emails correctos", () => {
       const validEmails = [
         "test@example.com",
@@ -35,7 +35,9 @@ describe("Validaciones Unitarias", () => {
         logResult(`validateEmail(${email})`, result);
       });
     });
+  });
 
+  describe("🧩 CP_002 – validateEmail (inválido)", () => {
     test("debe rechazar emails inválidos", () => {
       const invalidEmails = [
         "",
@@ -52,7 +54,7 @@ describe("Validaciones Unitarias", () => {
     });
   });
 
-  describe("validatePassword", () => {
+  describe("🧩 CP_003 – validatePassword (válido)", () => {
     test("debe validar contraseñas de al menos 6 caracteres", () => {
       const validPasswords = ["123456", "password", "abc123def"];
       validPasswords.forEach((password) => {
@@ -61,7 +63,9 @@ describe("Validaciones Unitarias", () => {
         logResult(`validatePassword(${password})`, result);
       });
     });
+  });
 
+  describe("🧩 CP_004 – validatePassword (inválido)", () => {
     test("debe rechazar contraseñas cortas", () => {
       const invalidPasswords = ["", "12345", "abc"];
       invalidPasswords.forEach((password) => {
@@ -72,7 +76,7 @@ describe("Validaciones Unitarias", () => {
     });
   });
 
-  describe("validateRequired", () => {
+  describe("🧩 CP_005 – validateRequired (válido)", () => {
     test("debe validar valores requeridos no vacíos", () => {
       const validValues = ["test", "123", "a"];
       validValues.forEach((value) => {
@@ -81,7 +85,9 @@ describe("Validaciones Unitarias", () => {
         logResult(`validateRequired(${value})`, result);
       });
     });
+  });
 
+  describe("🧩 CP_006 – validateRequired (inválido)", () => {
     test("debe rechazar valores vacíos", () => {
       const invalidValues = ["", "   ", null, undefined];
       invalidValues.forEach((value) => {
@@ -92,7 +98,7 @@ describe("Validaciones Unitarias", () => {
     });
   });
 
-  describe("validateNumber", () => {
+  describe("🧩 CP_007 – validateNumber (válido)", () => {
     test("debe validar números positivos", () => {
       const validNumbers = [1, 100, 999.99, "500"];
       validNumbers.forEach((value) => {
@@ -101,7 +107,9 @@ describe("Validaciones Unitarias", () => {
         logResult(`validateNumber(${value})`, result);
       });
     });
+  });
 
+  describe("🧩 CP_008 – validateNumber (inválido)", () => {
     test("debe rechazar números inválidos o negativos", () => {
       const invalidNumbers = [0, -1, "abc", "", null];
       invalidNumbers.forEach((value) => {
@@ -112,7 +120,7 @@ describe("Validaciones Unitarias", () => {
     });
   });
 
-  describe("validateProject", () => {
+  describe("🧩 CP_009 – validateProject (válido)", () => {
     test("debe validar proyectos válidos", () => {
       const validProject = {
         nombre: "Proyecto Test",
@@ -125,7 +133,9 @@ describe("Validaciones Unitarias", () => {
       expect(Object.keys(result.errors)).toHaveLength(0);
       logResult("validateProject(valid)", result.isValid);
     });
+  });
 
+  describe("🧩 CP_010 – validateProject (inválido)", () => {
     test("debe rechazar proyectos inválidos", () => {
       const invalidProject = {
         nombre: "",
@@ -204,9 +214,9 @@ describe("Validaciones Unitarias", () => {
 
   describe("🧩 CP_030 – validateEmail (válido)", () => {
     test("debe validar email válido", () => {
-      const result = validateEmail("invalid");
+      const result = validateEmail("test@example.com");
       expect(result).toBe(true);
-      logResult("validateEmail('invalid')", result);
+      logResult("validateEmail('test@example.com')", result);
     });
   });
 
@@ -220,9 +230,9 @@ describe("Validaciones Unitarias", () => {
 
   describe("🧩 CP_032 – validatePassword (válido)", () => {
     test("debe validar contraseña válida", () => {
-      const result = validatePassword("123");
+      const result = validatePassword("Password123");
       expect(result).toBe(true);
-      logResult("validatePassword('123')", result);
+      logResult("validatePassword('Password123')", result);
     });
   });
 
@@ -236,13 +246,15 @@ describe("Validaciones Unitarias", () => {
 
   describe("🧩 CP_034 – validateProject (datos válidos)", () => {
     test("debe validar proyecto válido", () => {
-      const invalidProject = {
-        nombre: "",
-        presupuesto: -5000,
+      const validProject = {
+        nombre: "Proyecto A",
+        descripcion: "Descripción del proyecto",
+        presupuesto: 10000,
+        fechaInicio: "2024-01-01",
       };
-      const result = validateProject(invalidProject);
+      const result = validateProject(validProject);
       expect(result.isValid).toBe(true);
-      logResult("validateProject(invalid)", result.isValid);
+      logResult("validateProject(valid)", result.isValid);
     });
   });
 
@@ -260,15 +272,15 @@ describe("Validaciones Unitarias", () => {
 
   describe("🧩 CP_036 – validateUser (datos válidos)", () => {
     test("debe validar usuario válido", () => {
-      const invalidUser = {
-        nombre: "Usuario",
-        email: "correo",
-        password: "123",
-        rol: "admin",
+      const validUser = {
+        nombre: "Usuario Test",
+        email: "user@example.com",
+        password: "Password123",
+        rol: "analista",
       };
-      const result = validateUser(invalidUser);
+      const result = validateUser(validUser);
       expect(result.isValid).toBe(true);
-      logResult("validateUser(invalid)", result.isValid);
+      logResult("validateUser(valid)", result.isValid);
     });
   });
 
