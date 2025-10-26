@@ -1,83 +1,39 @@
-# TODO - Sistema de Gestión de Proyectos
+# TODO List for Switching to MySQL Backend and Adding Testing Infrastructure
 
-## ✅ Completed Tasks
+## Backend Setup
 
-### 1. API Service Updates
+- [ ] Create `backend/` directory structure
+- [ ] Create `backend/package.json` with Express, mysql2, cors, dotenv deps
+- [ ] Create `backend/server.js` for Express app setup
+- [ ] Create `backend/db.js` for MySQL connection (root, no password, port 3305)
+- [ ] Create `schema.sql` for database table creation (projects, budgets, reports, users, purchases, strategies, quotations)
+- [ ] Create `data.sql` for inserting mock data into tables
+- [ ] Create `backend/routes/projects.js` with CRUD endpoints
+- [ ] Create `backend/routes/budgets.js` with CRUD endpoints
+- [ ] Create `backend/routes/reports.js` with CRUD endpoints
+- [ ] Create `backend/routes/users.js` with CRUD endpoints
+- [ ] Create `backend/routes/purchases.js` with CRUD endpoints
+- [ ] Create `backend/routes/strategies.js` with CRUD endpoints
+- [ ] Create `backend/routes/quotations.js` with CRUD endpoints
 
-- ✅ Added update, create, get methods for budgets
-- ✅ Added create, update, get, export methods for reports
-- ✅ Added create, update, get methods for purchases
-- ✅ Added create, update, get methods for strategies
-- ✅ Added create, update, get, send email methods for quotations
+## Frontend Updates
 
-### 2. Budgets Module
+- [ ] Update `src/services/api.js` to replace mock functions with fetch calls to backend (http://localhost:3001/api/\*)
+- [ ] Add testing dependencies to `package.json` (jest, supertest, artillery, etc.)
 
-- ✅ Created BudgetDetailModal component
-- ✅ Wired up "Ver Detalles" and "Editar" buttons in Budgets.jsx
-- ✅ BudgetForm supports editing with initialData
+## Testing Infrastructure
 
-### 3. Reports Module
+- [ ] Create `tests/` directory structure (unit/, integration/, performance/, security/)
+- [ ] Create `tests/unit/validations.test.js` for unit tests on validations
+- [ ] Create `tests/integration/api.test.js` for integration tests on API endpoints
+- [ ] Create `tests/performance/load.test.js` for performance tests with Artillery
+- [ ] Create `tests/security/basic.test.js` for basic security checks
+- [ ] Add npm scripts in package.json for running tests
 
-- ✅ Created ReportDetailModal component
-- ✅ Created ReportForm component with validation
-- ✅ Added export functionality (PDF/Excel) to Reports.jsx
-- ✅ Wired up "Ver" and "Editar" buttons in ReportTable.jsx
-- ✅ Added "Nuevo Reporte" functionality
+## Verification and Testing
 
-### 4. Validations
-
-- ✅ Added validateReport function to validations.js
-
-## ✅ Completed Tasks
-
-### 5. Purchases Module
-
-- ✅ Create PurchaseForm component
-- ✅ Create PurchaseDetailModal component
-- ✅ Wire up "Nueva Compra", "Ver", and "Editar" buttons in Purchases.jsx
-
-### 6. Strategies Module
-
-- ✅ Create StrategyForm component
-- ✅ Create StrategyDetailModal component
-- ✅ Wire up "Nueva Estrategia", "Ver Detalles", and "Editar" buttons in Strategies.jsx
-
-### 7. Quotations Module
-
-- ✅ Create QuotationForm component
-- ✅ Create QuotationDetailModal component
-- ✅ Add email sending functionality (mock)
-- ✅ Wire up "Nueva Cotización", "Ver", "Editar", and "Enviar" buttons in Quotations.jsx
-
-## 📋 Next Steps
-
-1. **Testing & Validation:**
-
-   - Test all new functionalities with mock data
-   - Ensure forms validate properly
-   - Verify export functionality works
-   - Test email sending (mock for now)
-
-2. **Additional Components:**
-
-   - Create reusable Modal components if needed
-   - Add export utilities for reports (real implementation)
-   - Add email service integration (real implementation)
-
-3. **Database Integration:**
-   - Replace mock API calls with real backend calls
-   - Update API service to connect to Node/Express + MySQL backend
-   - Implement real file export and email sending
-
-## 🐛 Known Issues
-
-- Export functionality currently shows alerts (mock implementation)
-- Email sending currently shows alerts (mock implementation)
-- No real file downloads or email sending yet
-
-## 📝 Notes
-
-- All components follow the existing design patterns
-- Forms include proper validation using the validations.js utilities
-- Modal components are responsive and follow the existing UI patterns
-- API calls include proper error handling
+- [ ] Run schema.sql and data.sql in XAMPP MySQL
+- [ ] Install backend dependencies and run backend server
+- [ ] Test frontend with backend integration
+- [ ] Run all tests and verify results
+- [ ] Ensure system runs without issues

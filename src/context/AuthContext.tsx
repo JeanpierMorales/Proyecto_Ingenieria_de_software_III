@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authService } from '../services/auth';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { authService } from "../services/auth";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
+    throw new Error("useAuth debe ser usado dentro de un AuthProvider");
   }
   return context;
 };
@@ -17,9 +17,15 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Verificar si hay un usuario logueado al cargar la aplicación
-    const currentUser = authService.getCurrentUser();
-    setUser(currentUser);
-    setLoading(false);
+    try {
+      const currentUser = authService.getCurrentUser();
+      setUser(currentUser);
+    } catch (error) {
+      console.error("Error loading user from localStorage:", error);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const login = async (email, password) => {
@@ -41,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       return { success: true };
     } catch (error) {
-      return { success: false, message: 'Error al cerrar sesión' };
+      return { success: false, message: "Error al cerrar sesión" };
     }
   };
 
@@ -59,14 +65,10 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     hasRole,
-    isAuthenticated
+    isAuthenticated,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export { AuthContext }
+export { AuthContext };

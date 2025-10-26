@@ -1,0 +1,54 @@
+config:
+  target: "http://localhost:3001"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "Fase de calentamiento"
+    - duration: 120
+      arrivalRate: 50
+      name: "Fase de carga"
+    - duration: 60
+      arrivalRate: 100
+      name: "Fase de estrés"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Obtener proyectos"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/projects"
+
+  - name: "Crear proyecto"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/projects"
+          json:
+            nombre: "Proyecto de Prueba de Rendimiento {{ $randomString() }}"
+            descripcion: "Proyecto para pruebas de carga"
+            presupuesto: 10000
+            fechaInicio: "2024-01-01"
+            estado: "pendiente"
+            clienteId: 1
+            responsable: "Usuario de Prueba"
+
+  - name: "Obtener presupuestos"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/budgets"
+
+  - name: "Obtener reportes"
+    weight: 15
+    flow:
+      - get:
+          url: "/api/reports"
+
+  - name: "Obtener usuarios"
+    weight: 5
+    flow:
+      - get:
+          url: "/api/users"

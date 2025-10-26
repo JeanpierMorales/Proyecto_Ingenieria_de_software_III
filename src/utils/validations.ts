@@ -5,11 +5,13 @@ export const validateEmail = (email) => {
 };
 
 export const validatePassword = (password) => {
-  return password && password.length >= 6;
+  return password !== null && password !== undefined && password.length >= 6;
 };
 
 export const validateRequired = (value) => {
-  return value && value.toString().trim() !== "";
+  return (
+    value !== null && value !== undefined && value.toString().trim() !== ""
+  );
 };
 
 export const validateNumber = (value) => {
