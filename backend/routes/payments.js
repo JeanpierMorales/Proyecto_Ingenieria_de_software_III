@@ -50,7 +50,7 @@ router.get("/", authenticateToken, (req, res) => {
     // Filtrar por orden de compra
     if (purchaseOrderId) {
       filteredPayments = filteredPayments.filter(
-        (p) => p.purchaseOrderId === parseInt(purchaseOrderId)
+        (p) => p.purchaseOrderId === Number.parseInt(purchaseOrderId)
       );
     }
 
@@ -63,14 +63,14 @@ router.get("/", authenticateToken, (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedPayments = filteredPayments.slice(startIndex, endIndex);
 
     res.json({
       payments: paginatedPayments,
       total: filteredPayments.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredPayments.length / limit),
     });
   } catch (error) {
@@ -82,7 +82,9 @@ router.get("/", authenticateToken, (req, res) => {
 // GET /api/payments/:id - Obtener pago por ID
 router.get("/:id", authenticateToken, (req, res) => {
   try {
-    const payment = payments.find((p) => p.id === parseInt(req.params.id));
+    const payment = payments.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!payment) {
       return res.status(404).json({ message: "Pago no encontrado" });
     }
@@ -120,8 +122,8 @@ router.post("/", authenticateToken, (req, res) => {
 
     const newPayment = {
       id: payments.length + 1,
-      purchaseOrderId: parseInt(purchaseOrderId),
-      amount: parseFloat(amount),
+      purchaseOrderId: Number.parseInt(purchaseOrderId),
+      amount: Number.parseFloat(amount),
       method,
       status: "pending",
       reference,
@@ -148,7 +150,9 @@ router.post("/", authenticateToken, (req, res) => {
 // PUT /api/payments/:id - Actualizar pago
 router.put("/:id", authenticateToken, (req, res) => {
   try {
-    const payment = payments.find((p) => p.id === parseInt(req.params.id));
+    const payment = payments.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!payment) {
       return res.status(404).json({ message: "Pago no encontrado" });
     }
@@ -166,7 +170,7 @@ router.put("/:id", authenticateToken, (req, res) => {
       if (amount <= 0) {
         return res.status(400).json({ message: "El monto debe ser positivo" });
       }
-      payment.amount = parseFloat(amount);
+      payment.amount = Number.parseFloat(amount);
     }
 
     if (method) {
@@ -192,7 +196,9 @@ router.put("/:id", authenticateToken, (req, res) => {
 // POST /api/payments/:id/process - Procesar pago
 router.post("/:id/process", authenticateToken, (req, res) => {
   try {
-    const payment = payments.find((p) => p.id === parseInt(req.params.id));
+    const payment = payments.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!payment) {
       return res.status(404).json({ message: "Pago no encontrado" });
     }
@@ -225,7 +231,9 @@ router.post("/:id/process", authenticateToken, (req, res) => {
 // POST /api/payments/:id/cancel - Cancelar pago
 router.post("/:id/cancel", authenticateToken, (req, res) => {
   try {
-    const payment = payments.find((p) => p.id === parseInt(req.params.id));
+    const payment = payments.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!payment) {
       return res.status(404).json({ message: "Pago no encontrado" });
     }
@@ -259,7 +267,7 @@ router.post("/:id/cancel", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const paymentIndex = payments.findIndex(
-      (p) => p.id === parseInt(req.params.id)
+      (p) => p.id === Number.parseInt(req.params.id)
     );
     if (paymentIndex === -1) {
       return res.status(404).json({ message: "Pago no encontrado" });
@@ -297,7 +305,7 @@ router.get(
   (req, res) => {
     try {
       const orderPayments = payments.filter(
-        (p) => p.purchaseOrderId === parseInt(req.params.purchaseOrderId)
+        (p) => p.purchaseOrderId === Number.parseInt(req.params.purchaseOrderId)
       );
       res.json(orderPayments);
     } catch (error) {

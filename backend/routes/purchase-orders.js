@@ -63,7 +63,7 @@ router.get("/", authenticateToken, (req, res) => {
     // Filtrar por proyecto
     if (projectId) {
       filteredOrders = filteredOrders.filter(
-        (po) => po.projectId === parseInt(projectId)
+        (po) => po.projectId === Number.parseInt(projectId)
       );
     }
 
@@ -81,14 +81,14 @@ router.get("/", authenticateToken, (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
 
     res.json({
       purchaseOrders: paginatedOrders,
       total: filteredOrders.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredOrders.length / limit),
     });
   } catch (error) {
@@ -101,7 +101,7 @@ router.get("/", authenticateToken, (req, res) => {
 router.get("/:id", authenticateToken, (req, res) => {
   try {
     const order = purchaseOrders.find(
-      (po) => po.id === parseInt(req.params.id)
+      (po) => po.id === Number.parseInt(req.params.id)
     );
     if (!order) {
       return res.status(404).json({ message: "Orden de compra no encontrada" });
@@ -169,7 +169,7 @@ router.post("/", authenticateToken, (req, res) => {
 router.put("/:id", authenticateToken, (req, res) => {
   try {
     const order = purchaseOrders.find(
-      (po) => po.id === parseInt(req.params.id)
+      (po) => po.id === Number.parseInt(req.params.id)
     );
     if (!order) {
       return res.status(404).json({ message: "Orden de compra no encontrada" });
@@ -212,7 +212,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.post("/:id/approve", authenticateToken, (req, res) => {
   try {
     const order = purchaseOrders.find(
-      (po) => po.id === parseInt(req.params.id)
+      (po) => po.id === Number.parseInt(req.params.id)
     );
     if (!order) {
       return res.status(404).json({ message: "Orden de compra no encontrada" });
@@ -247,7 +247,7 @@ router.post("/:id/approve", authenticateToken, (req, res) => {
 router.post("/:id/reject", authenticateToken, (req, res) => {
   try {
     const order = purchaseOrders.find(
-      (po) => po.id === parseInt(req.params.id)
+      (po) => po.id === Number.parseInt(req.params.id)
     );
     if (!order) {
       return res.status(404).json({ message: "Orden de compra no encontrada" });
@@ -282,7 +282,7 @@ router.post("/:id/reject", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const orderIndex = purchaseOrders.findIndex(
-      (po) => po.id === parseInt(req.params.id)
+      (po) => po.id === Number.parseInt(req.params.id)
     );
     if (orderIndex === -1) {
       return res.status(404).json({ message: "Orden de compra no encontrada" });
@@ -317,7 +317,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
 router.get("/project/:projectId", authenticateToken, (req, res) => {
   try {
     const projectOrders = purchaseOrders.filter(
-      (po) => po.projectId === parseInt(req.params.projectId)
+      (po) => po.projectId === Number.parseInt(req.params.projectId)
     );
     res.json(projectOrders);
   } catch (error) {

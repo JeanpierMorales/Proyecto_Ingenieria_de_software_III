@@ -95,14 +95,14 @@ router.get("/", authenticateToken, (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedInventory = filteredInventory.slice(startIndex, endIndex);
 
     res.json({
       inventory: paginatedInventory,
       total: filteredInventory.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredInventory.length / limit),
     });
   } catch (error) {
@@ -114,7 +114,7 @@ router.get("/", authenticateToken, (req, res) => {
 // GET /api/inventory/:id - Obtener item por ID
 router.get("/:id", authenticateToken, (req, res) => {
   try {
-    const item = inventory.find((i) => i.id === parseInt(req.params.id));
+    const item = inventory.find((i) => i.id === Number.parseInt(req.params.id));
     if (!item) {
       return res
         .status(404)
@@ -164,14 +164,14 @@ router.post("/", authenticateToken, (req, res) => {
       name,
       category,
       description: description || "",
-      quantity: parseInt(quantity),
-      minQuantity: minQuantity ? parseInt(minQuantity) : 1,
-      unitCost: parseFloat(unitCost),
-      totalValue: parseInt(quantity) * parseFloat(unitCost),
+      quantity: Number.parseInt(quantity),
+      minQuantity: minQuantity ? Number.parseInt(minQuantity) : 1,
+      unitCost: Number.parseFloat(unitCost),
+      totalValue: Number.parseInt(quantity) * Number.parseFloat(unitCost),
       location: location || "General",
       supplier: supplier || "",
       lastUpdated: new Date(),
-      status: parseInt(quantity) > 0 ? "available" : "out_of_stock",
+      status: Number.parseInt(quantity) > 0 ? "available" : "out_of_stock",
     };
 
     inventory.push(newItem);
@@ -217,8 +217,9 @@ router.put("/:id", authenticateToken, (req, res) => {
           .status(400)
           .json({ message: "La cantidad no puede ser negativa" });
       }
-      item.quantity = parseInt(quantity);
-      item.status = parseInt(quantity) > 0 ? "available" : "out_of_stock";
+      item.quantity = Number.parseInt(quantity);
+      item.status =
+        Number.parseInt(quantity) > 0 ? "available" : "out_of_stock";
     }
 
     if (minQuantity !== undefined) {
@@ -227,7 +228,7 @@ router.put("/:id", authenticateToken, (req, res) => {
           .status(400)
           .json({ message: "La cantidad mínima no puede ser negativa" });
       }
-      item.minQuantity = parseInt(minQuantity);
+      item.minQuantity = Number.parseInt(minQuantity);
     }
 
     if (unitCost !== undefined) {
@@ -236,7 +237,7 @@ router.put("/:id", authenticateToken, (req, res) => {
           .status(400)
           .json({ message: "El costo unitario no puede ser negativo" });
       }
-      item.unitCost = parseFloat(unitCost);
+      item.unitCost = Number.parseFloat(unitCost);
     }
 
     if (location) item.location = location;
@@ -260,7 +261,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const itemIndex = inventory.findIndex(
-      (i) => i.id === parseInt(req.params.id)
+      (i) => i.id === Number.parseInt(req.params.id)
     );
     if (itemIndex === -1) {
       return res
@@ -287,7 +288,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
 // POST /api/inventory/:id/adjust - Ajustar cantidad
 router.post("/:id/adjust", authenticateToken, (req, res) => {
   try {
-    const item = inventory.find((i) => i.id === parseInt(req.params.id));
+    const item = inventory.find((i) => i.id === Number.parseInt(req.params.id));
     if (!item) {
       return res
         .status(404)
@@ -300,7 +301,7 @@ router.post("/:id/adjust", authenticateToken, (req, res) => {
       return res.status(400).json({ message: "Ajuste y razón son requeridos" });
     }
 
-    const newQuantity = item.quantity + parseInt(adjustment);
+    const newQuantity = item.quantity + Number.parseInt(adjustment);
 
     if (newQuantity < 0) {
       return res
@@ -316,7 +317,7 @@ router.post("/:id/adjust", authenticateToken, (req, res) => {
     res.json({
       message: "Cantidad ajustada exitosamente",
       item,
-      adjustment: parseInt(adjustment),
+      adjustment: Number.parseInt(adjustment),
       reason,
     });
   } catch (error) {

@@ -77,7 +77,7 @@ router.get("/", authenticateToken, (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedNotifications = userNotifications.slice(
       startIndex,
       endIndex
@@ -87,8 +87,8 @@ router.get("/", authenticateToken, (req, res) => {
       notifications: paginatedNotifications,
       total: userNotifications.length,
       unread: userNotifications.filter((n) => !n.read).length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(userNotifications.length / limit),
     });
   } catch (error) {
@@ -101,7 +101,7 @@ router.get("/", authenticateToken, (req, res) => {
 router.get("/:id", authenticateToken, (req, res) => {
   try {
     const notification = notifications.find(
-      (n) => n.id === parseInt(req.params.id) && n.userId === req.user.id
+      (n) => n.id === Number.parseInt(req.params.id) && n.userId === req.user.id
     );
 
     if (!notification) {
@@ -119,7 +119,7 @@ router.get("/:id", authenticateToken, (req, res) => {
 router.put("/:id/read", authenticateToken, (req, res) => {
   try {
     const notification = notifications.find(
-      (n) => n.id === parseInt(req.params.id) && n.userId === req.user.id
+      (n) => n.id === Number.parseInt(req.params.id) && n.userId === req.user.id
     );
 
     if (!notification) {
@@ -166,7 +166,7 @@ router.put("/read-all", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const notificationIndex = notifications.findIndex(
-      (n) => n.id === parseInt(req.params.id) && n.userId === req.user.id
+      (n) => n.id === Number.parseInt(req.params.id) && n.userId === req.user.id
     );
 
     if (notificationIndex === -1) {
@@ -227,7 +227,7 @@ router.post("/", authenticateToken, (req, res) => {
 
     const newNotification = {
       id: notifications.length + 1,
-      userId: parseInt(userId),
+      userId: Number.parseInt(userId),
       title,
       message,
       type,
@@ -287,7 +287,7 @@ router.post("/broadcast", authenticateToken, (req, res) => {
     userIds.forEach((userId) => {
       const newNotification = {
         id: notifications.length + 1,
-        userId: parseInt(userId),
+        userId: Number.parseInt(userId),
         title,
         message,
         type,
