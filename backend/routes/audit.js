@@ -67,7 +67,7 @@ router.get("/", authenticateToken, (req, res) => {
     // Filtrar por usuario
     if (userId) {
       filteredLogs = filteredLogs.filter(
-        (log) => log.userId === parseInt(userId)
+        (log) => log.userId === Number.parseInt(userId)
       );
     }
 
@@ -101,14 +101,14 @@ router.get("/", authenticateToken, (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedLogs = filteredLogs.slice(startIndex, endIndex);
 
     res.json({
       logs: paginatedLogs,
       total: filteredLogs.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredLogs.length / limit),
     });
   } catch (error) {
@@ -126,7 +126,7 @@ router.get("/:id", authenticateToken, (req, res) => {
         .json({ message: "Solo administradores pueden ver logs de auditoría" });
     }
 
-    const log = auditLogs.find((l) => l.id === parseInt(req.params.id));
+    const log = auditLogs.find((l) => l.id === Number.parseInt(req.params.id));
     if (!log) {
       return res
         .status(404)
@@ -181,7 +181,7 @@ router.get("/user/:userId", authenticateToken, (req, res) => {
   try {
     if (
       req.user.role !== "admin" &&
-      req.user.id !== parseInt(req.params.userId)
+      req.user.id !== Number.parseInt(req.params.userId)
     ) {
       return res
         .status(403)
@@ -189,7 +189,7 @@ router.get("/user/:userId", authenticateToken, (req, res) => {
     }
 
     const userLogs = auditLogs.filter(
-      (log) => log.userId === parseInt(req.params.userId)
+      (log) => log.userId === Number.parseInt(req.params.userId)
     );
 
     // Ordenar por timestamp descendente

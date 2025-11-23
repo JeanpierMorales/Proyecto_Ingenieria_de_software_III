@@ -60,14 +60,14 @@ router.get("/", authenticateToken, (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedBackups = filteredBackups.slice(startIndex, endIndex);
 
     res.json({
       backups: paginatedBackups,
       total: filteredBackups.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredBackups.length / limit),
     });
   } catch (error) {
@@ -196,7 +196,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
     }
 
     const backupIndex = backups.findIndex(
-      (b) => b.id === parseInt(req.params.id)
+      (b) => b.id === Number.parseInt(req.params.id)
     );
     if (backupIndex === -1) {
       return res.status(404).json({ message: "Backup no encontrado" });

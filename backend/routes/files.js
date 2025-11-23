@@ -76,27 +76,27 @@ router.get("/", authenticateToken, (req, res) => {
     // Filtrar por proyecto
     if (projectId) {
       filteredFiles = filteredFiles.filter(
-        (f) => f.projectId === parseInt(projectId)
+        (f) => f.projectId === Number.parseInt(projectId)
       );
     }
 
     // Filtrar por usuario que subió
     if (uploadedBy) {
       filteredFiles = filteredFiles.filter(
-        (f) => f.uploadedBy === parseInt(uploadedBy)
+        (f) => f.uploadedBy === Number.parseInt(uploadedBy)
       );
     }
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedFiles = filteredFiles.slice(startIndex, endIndex);
 
     res.json({
       files: paginatedFiles,
       total: filteredFiles.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredFiles.length / limit),
     });
   } catch (error) {
@@ -108,7 +108,7 @@ router.get("/", authenticateToken, (req, res) => {
 // GET /api/files/:id - Obtener archivo por ID
 router.get("/:id", authenticateToken, (req, res) => {
   try {
-    const file = files.find((f) => f.id === parseInt(req.params.id));
+    const file = files.find((f) => f.id === Number.parseInt(req.params.id));
     if (!file) {
       return res.status(404).json({ message: "Archivo no encontrado" });
     }
@@ -194,7 +194,9 @@ router.get("/:id/download", authenticateToken, async (req, res) => {
 // DELETE /api/files/:id - Eliminar archivo
 router.delete("/:id", authenticateToken, async (req, res) => {
   try {
-    const fileIndex = files.findIndex((f) => f.id === parseInt(req.params.id));
+    const fileIndex = files.findIndex(
+      (f) => f.id === Number.parseInt(req.params.id)
+    );
     if (fileIndex === -1) {
       return res.status(404).json({ message: "Archivo no encontrado" });
     }
@@ -228,8 +230,8 @@ router.delete("/:id", authenticateToken, async (req, res) => {
 // GET /api/files/project/:projectId - Obtener archivos de un proyecto
 router.get("/project/:projectId", authenticateToken, (req, res) => {
   try {
-    const projectFiles = files.filter(
-      (f) => f.projectId === parseInt(req.params.projectId)
+    projectFiles = files.filter(
+      (f) => f.projectId === Number.parseInt(req.params.projectId)
     );
     res.json(projectFiles);
   } catch (error) {
