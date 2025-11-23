@@ -198,9 +198,19 @@ const simulateNetworkDelay = () => {
 
 // API de Proyectos
 export const projectsAPI = {
-  async getProjects() {
-    await simulateNetworkDelay();
-    return { success: true, data: MOCK_PROJECTS };
+  async getProjects({ page = 1, limit = 50 } = {}) {
+    try {
+      const pageNum = Number.parseInt(page, 10);
+      const limitNum = Number.parseInt(limit, 10);
+      const res = await fetch(
+        `/api/projects?page=${pageNum}&limit=${limitNum}`
+      );
+      if (!res.ok) throw new Error("Error fetching projects");
+      return await res.json();
+    } catch (err) {
+      console.error("projectsAPI.getProjects error:", err);
+      return { success: false, message: err.message };
+    }
   },
 
   async createProject(project) {
@@ -329,3 +339,42 @@ export const quotationsAPI = {
     return { success: true, data: MOCK_QUOTATIONS };
   },
 };
+
+// API de Autenticación
+export async function login(credentials) {
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || "Error en login");
+    }
+    const data = await res.json();
+    // guardar token en localStorage/session
+    localStorage.setItem("token", data.token);
+    return { success: true, data };
+  } catch (err) {
+    console.error("auth.login error:", err);
+    return { success: false, message: err.message };
+  }
+}
+
+// tests
+test("GET /projects returns list", async () => {
+  await expect(async () => {
+    const res = await api.get("/projects");
+    if (!res.ok) throw new Error("Request failed");
+    return res;
+  }).not.toThrow();
+});
+
+// Si hay bloques try/catch en tests, asegúrate de fallar el test al capturar:
+try {
+  // test logic
+} catch (err) {
+  // rethrow para que el test falle
+  throw err;
+}

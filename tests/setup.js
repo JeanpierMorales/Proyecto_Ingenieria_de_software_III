@@ -29,3 +29,8 @@ afterAll(() => {
   console.warn = originalConsoleWarn;
   console.error = originalConsoleError;
 });
+
+// Antes: global.app = appInstance;
+// Ahora:
+globalThis.app = appInstance;
+globalThis.testUser = { id: 1, name: "test" };
