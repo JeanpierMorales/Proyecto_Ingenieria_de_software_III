@@ -216,7 +216,7 @@ export const projectsAPI = {
 
   async updateProject(id, project) {
     await simulateNetworkDelay();
-    const index = MOCK_PROJECTS.findIndex((p) => p.id === parseInt(id));
+    const index = MOCK_PROJECTS.findIndex((p) => p.id === Number.parseInt(id));
     if (index !== -1) {
       MOCK_PROJECTS[index] = { ...MOCK_PROJECTS[index], ...project };
       return { success: true, data: MOCK_PROJECTS[index] };
@@ -226,7 +226,7 @@ export const projectsAPI = {
 
   async deleteProject(id) {
     await simulateNetworkDelay();
-    const index = MOCK_PROJECTS.findIndex((p) => p.id === parseInt(id));
+    const index = MOCK_PROJECTS.findIndex((p) => p.id === Number.parseInt(id));
     if (index !== -1) {
       MOCK_PROJECTS.splice(index, 1);
       return { success: true };
@@ -277,7 +277,7 @@ export const reportsAPI = {
 
   async updateReport(id, report) {
     await simulateNetworkDelay();
-    const index = MOCK_REPORTS.findIndex((r) => r.id === parseInt(id));
+    const index = MOCK_REPORTS.findIndex((r) => r.id === Number.parseInt(id));
     if (index !== -1) {
       MOCK_REPORTS[index] = { ...MOCK_REPORTS[index], ...report };
       return { success: true, data: MOCK_REPORTS[index] };
@@ -329,26 +329,3 @@ export const quotationsAPI = {
     return { success: true, data: MOCK_QUOTATIONS };
   },
 };
-
-// TODO: Integración futura con backend Node/Express + MySQL
-/*
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
-
-export const projectsAPI = {
-  async getProjects() {
-    const response = await fetch(`${API_BASE_URL}/projects`);
-    return response.json();
-  },
-  
-  async createProject(project) {
-    const response = await fetch(`${API_BASE_URL}/projects`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(project)
-    });
-    return response.json();
-  },
-  
-  // ... resto de métodos CRUD
-};
-*/

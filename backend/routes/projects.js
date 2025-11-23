@@ -57,15 +57,17 @@ router.get("/", (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + Number.parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit, 10);
     const paginatedProjects = filteredProjects.slice(startIndex, endIndex);
 
     res.json({
       projects: paginatedProjects,
       total: filteredProjects.length,
-      page: Number.parseInt(page),
-      limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredProjects.length / limit),
+      page: Number.parseInt(page, 10),
+      limit: Number.parseInt(limit, 10),
+      totalPages: Math.ceil(
+        filteredProjects.length / Number.parseInt(limit, 10)
+      ),
     });
   } catch (error) {
     console.error("Error obteniendo proyectos:", error);
@@ -77,7 +79,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
   try {
     const project = projects.find(
-      (p) => p.id === Number.parseInt(req.params.id)
+      (p) => p.id === Number.parseInt(req.params.id, 10)
     );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
@@ -178,7 +180,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const projectIndex = projects.findIndex(
-      (p) => p.id === Number.parseInt(req.params.id)
+      (p) => p.id === Number.parseInt(req.params.id, 10)
     );
     if (projectIndex === -1) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
@@ -206,7 +208,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
 router.get("/:id/tasks", (req, res) => {
   try {
     const project = projects.find(
-      (p) => p.id === Number.parseInt(req.params.id)
+      (p) => p.id === Number.parseInt(req.params.id, 10)
     );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
@@ -245,7 +247,7 @@ router.get("/:id/tasks", (req, res) => {
 router.post("/:id/tasks", authenticateToken, (req, res) => {
   try {
     const project = projects.find(
-      (p) => p.id === Number.parseInt(req.params.id)
+      (p) => p.id === Number.parseInt(req.params.id, 10)
     );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });

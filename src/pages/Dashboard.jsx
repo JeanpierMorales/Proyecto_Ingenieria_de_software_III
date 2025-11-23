@@ -1,150 +1,156 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  FolderOpen, 
-  Calculator, 
-  FileText, 
-  Users, 
-  ShoppingCart, 
-  Target, 
-  Receipt, 
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  FolderOpen,
+  Calculator,
+  FileText,
+  Users,
+  ShoppingCart,
+  Target,
+  Receipt,
   TrendingUp,
   AlertCircle,
   CheckCircle,
-  Clock
-} from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
-import { usePermissions } from '../hooks/useAuth';
+  Clock,
+} from "lucide-react";
+import { useAuth, usePermissions } from "../hooks/useAuth";
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { 
-    canManageUsers, 
-    canManageProjects, 
-    canViewReports, 
-    canManageBudgets 
+  const {
+    canManageUsers,
+    canManageProjects,
+    canViewReports,
+    canManageBudgets,
   } = usePermissions();
 
   const dashboardCards = [
     {
-      title: 'Proyectos',
-      description: 'Gestionar proyectos activos',
+      title: "Proyectos",
+      description: "Gestionar proyectos activos",
       icon: FolderOpen,
-      path: '/projects',
-      color: 'bg-blue-500',
-      show: canManageProjects()
+      path: "/projects",
+      color: "bg-blue-500",
+      show: canManageProjects(),
     },
     {
-      title: 'Presupuestos',
-      description: 'Crear y revisar presupuestos',
+      title: "Presupuestos",
+      description: "Crear y revisar presupuestos",
       icon: Calculator,
-      path: '/budgets',
-      color: 'bg-green-500',
-      show: canManageBudgets()
+      path: "/budgets",
+      color: "bg-green-500",
+      show: canManageBudgets(),
     },
     {
-      title: 'Reportes',
-      description: 'Informes y análisis',
+      title: "Reportes",
+      description: "Informes y análisis",
       icon: FileText,
-      path: '/reports',
-      color: 'bg-purple-500',
-      show: canViewReports()
+      path: "/reports",
+      color: "bg-purple-500",
+      show: canViewReports(),
     },
     {
-      title: 'Usuarios',
-      description: 'Administrar usuarios del sistema',
+      title: "Usuarios",
+      description: "Administrar usuarios del sistema",
       icon: Users,
-      path: '/users',
-      color: 'bg-indigo-500',
-      show: canManageUsers()
+      path: "/users",
+      color: "bg-indigo-500",
+      show: canManageUsers(),
     },
     {
-      title: 'Compras',
-      description: 'Gestión de compras y suministros',
+      title: "Compras",
+      description: "Gestión de compras y suministros",
       icon: ShoppingCart,
-      path: '/purchases',
-      color: 'bg-orange-500',
-      show: canManageProjects()
+      path: "/purchases",
+      color: "bg-orange-500",
+      show: canManageProjects(),
     },
     {
-      title: 'Estrategias',
-      description: 'Estrategias de mejora',
+      title: "Estrategias",
+      description: "Estrategias de mejora",
       icon: Target,
-      path: '/strategies',
-      color: 'bg-red-500',
-      show: canManageProjects()
+      path: "/strategies",
+      color: "bg-red-500",
+      show: canManageProjects(),
     },
     {
-      title: 'Cotizaciones',
-      description: 'Solicitar y revisar cotizaciones',
+      title: "Cotizaciones",
+      description: "Solicitar y revisar cotizaciones",
       icon: Receipt,
-      path: '/quotations',
-      color: 'bg-teal-500',
-      show: canManageProjects()
-    }
+      path: "/quotations",
+      color: "bg-teal-500",
+      show: canManageProjects(),
+    },
   ];
 
   const stats = [
     {
-      title: 'Proyectos Activos',
-      value: '8',
-      change: '+12%',
-      changeType: 'increase',
-      icon: FolderOpen
+      title: "Proyectos Activos",
+      value: "8",
+      change: "+12%",
+      changeType: "increase",
+      icon: FolderOpen,
     },
     {
-      title: 'Presupuestos Pendientes',
-      value: '3',
-      change: '-5%',
-      changeType: 'decrease',
-      icon: Clock
+      title: "Presupuestos Pendientes",
+      value: "3",
+      change: "-5%",
+      changeType: "decrease",
+      icon: Clock,
     },
     {
-      title: 'Reportes Completados',
-      value: '24',
-      change: '+18%',
-      changeType: 'increase',
-      icon: CheckCircle
+      title: "Reportes Completados",
+      value: "24",
+      change: "+18%",
+      changeType: "increase",
+      icon: CheckCircle,
     },
     {
-      title: 'Alertas Activas',
-      value: '2',
-      change: '0%',
-      changeType: 'neutral',
-      icon: AlertCircle
-    }
+      title: "Alertas Activas",
+      value: "2",
+      change: "0%",
+      changeType: "neutral",
+      icon: AlertCircle,
+    },
   ];
 
   const recentActivities = [
     {
       id: 1,
-      title: 'Nuevo proyecto creado',
-      description: 'Sistema de Inventario iniciado',
-      time: 'Hace 2 horas',
-      type: 'project'
+      title: "Nuevo proyecto creado",
+      description: "Sistema de Inventario iniciado",
+      time: "Hace 2 horas",
+      type: "project",
     },
     {
       id: 2,
-      title: 'Presupuesto aprobado',
-      description: 'Presupuesto App Mobile aprobado',
-      time: 'Hace 4 horas',
-      type: 'budget'
+      title: "Presupuesto aprobado",
+      description: "Presupuesto App Mobile aprobado",
+      time: "Hace 4 horas",
+      type: "budget",
     },
     {
       id: 3,
-      title: 'Reporte generado',
-      description: 'Informe mensual de enero completado',
-      time: 'Hace 1 día',
-      type: 'report'
+      title: "Reporte generado",
+      description: "Informe mensual de enero completado",
+      time: "Hace 1 día",
+      type: "report",
     },
     {
       id: 4,
-      title: 'Usuario registrado',
-      description: 'Nuevo analista agregado al sistema',
-      time: 'Hace 2 días',
-      type: 'user'
-    }
+      title: "Usuario registrado",
+      description: "Nuevo analista agregado al sistema",
+      time: "Hace 2 días",
+      type: "user",
+    },
   ];
+
+  // Extracted text color class based on changeType to improve readability
+  const getChangeTextColor = (changeType) => {
+    if (changeType === "increase") return "text-green-600";
+    if (changeType === "decrease") return "text-red-600";
+    return "text-gray-500";
+  };
 
   return (
     <div className="space-y-6">
@@ -160,19 +166,15 @@ const Dashboard = () => {
 
       {/* Estadísticas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-md p-6">
+        {stats.map((stat) => (
+          <div key={stat.title} className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  {stat.title}
+                </p>
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className={`text-sm ${
-                  stat.changeType === 'increase' 
-                    ? 'text-green-600' 
-                    : stat.changeType === 'decrease'
-                    ? 'text-red-600'
-                    : 'text-gray-500'
-                }`}>
+                <p className={`text-sm ${getChangeTextColor(stat.changeType)}`}>
                   {stat.change} desde el mes pasado
                 </p>
               </div>
@@ -190,30 +192,30 @@ const Dashboard = () => {
           Accesos Rápidos
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {dashboardCards.filter(card => card.show).map((card) => (
-            <Link
-              key={card.title}
-              to={card.path}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow group"
-            >
-              <div className="flex items-center mb-4">
-                <div className={`p-3 rounded-full ${card.color}`}>
-                  <card.icon className="w-6 h-6 text-white" />
+          {dashboardCards
+            .filter((card) => card.show)
+            .map((card) => (
+              <Link
+                key={card.title}
+                to={card.path}
+                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow group"
+              >
+                <div className="flex items-center mb-4">
+                  <div className={`p-3 rounded-full ${card.color}`}>
+                    <card.icon className="w-6 h-6 text-white" />
+                  </div>
                 </div>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                {card.title}
-              </h3>
-              <p className="text-sm text-gray-600 mt-1">
-                {card.description}
-              </p>
-              <div className="mt-4">
-                <span className="text-sm text-blue-600 font-medium group-hover:text-blue-700">
-                  Acceder →
-                </span>
-              </div>
-            </Link>
-          ))}
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  {card.title}
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">{card.description}</p>
+                <div className="mt-4">
+                  <span className="text-sm text-blue-600 font-medium group-hover:text-blue-700">
+                    Acceder →
+                  </span>
+                </div>
+              </Link>
+            ))}
         </div>
       </div>
 
@@ -238,9 +240,7 @@ const Dashboard = () => {
                   <p className="text-sm text-gray-600">
                     {activity.description}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {activity.time}
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
                 </div>
               </div>
             ))}
@@ -264,7 +264,10 @@ const Dashboard = () => {
                 <span>75%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-green-500 h-2 rounded-full" style={{width: '75%'}}></div>
+                <div
+                  className="bg-green-500 h-2 rounded-full"
+                  style={{ width: "75%" }}
+                ></div>
               </div>
             </div>
             <div>
@@ -273,7 +276,10 @@ const Dashboard = () => {
                 <span>60%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-blue-500 h-2 rounded-full" style={{width: '60%'}}></div>
+                <div
+                  className="bg-blue-500 h-2 rounded-full"
+                  style={{ width: "60%" }}
+                ></div>
               </div>
             </div>
             <div>
@@ -282,7 +288,10 @@ const Dashboard = () => {
                 <span>90%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-purple-500 h-2 rounded-full" style={{width: '90%'}}></div>
+                <div
+                  className="bg-purple-500 h-2 rounded-full"
+                  style={{ width: "90%" }}
+                ></div>
               </div>
             </div>
           </div>

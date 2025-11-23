@@ -25,7 +25,7 @@ export const validateRequired = (value) => {
 };
 
 export const validateNumber = (value) => {
-  return !isNaN(value) && parseFloat(value) > 0;
+  return !Number.isNaN(value) && Number.parseFloat(value) > 0;
 };
 
 export const validateProject = (project) => {

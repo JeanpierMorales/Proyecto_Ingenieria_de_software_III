@@ -45,21 +45,23 @@ router.get("/", (req, res) => {
     // Filtrar por proyecto
     if (projectId) {
       filteredQuotations = filteredQuotations.filter(
-        (q) => q.projectId === Number.parseInt(projectId)
+        (q) => q.projectId === Number.parseInt(projectId, 10)
       );
     }
 
     // Paginación
-    const startIndex = (page - 1) * Number.parseInt(limit);
-    const endIndex = startIndex + Number.parseInt(limit);
+    const startIndex = (page - 1) * Number.parseInt(limit, 10);
+    const endIndex = startIndex + Number.parseInt(limit, 10);
     const paginatedQuotations = filteredQuotations.slice(startIndex, endIndex);
 
     res.json({
       quotations: paginatedQuotations,
       total: filteredQuotations.length,
-      page: Number.parseInt(page),
-      limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredQuotations.length / Number.parseInt(limit)),
+      page: Number.parseInt(page, 10),
+      limit: Number.parseInt(limit, 10),
+      totalPages: Math.ceil(
+        filteredQuotations.length / Number.parseInt(limit, 10)
+      ),
     });
   } catch (error) {
     console.error("Error obteniendo cotizaciones:", error);
@@ -100,7 +102,7 @@ router.post("/", authenticateToken, (req, res) => {
 
     const newQuotation = {
       id: quotations.length + 1,
-      projectId: Number.parseInt(projectId),
+      projectId: Number.parseInt(projectId, 10),
       supplier,
       description,
       amount: Number.parseFloat(amount),
@@ -128,7 +130,7 @@ router.post("/", authenticateToken, (req, res) => {
 router.put("/:id", authenticateToken, (req, res) => {
   try {
     const quotation = quotations.find(
-      (q) => q.id === Number.parseInt(req.params.id)
+      (q) => q.id === Number.parseInt(req.params.id, 10)
     );
     if (!quotation) {
       return res.status(404).json({ message: "Cotización no encontrada" });
@@ -162,7 +164,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const quotationIndex = quotations.findIndex(
-      (q) => q.id === Number.parseInt(req.params.id)
+      (q) => q.id === Number.parseInt(req.params.id, 10)
     );
     if (quotationIndex === -1) {
       return res.status(404).json({ message: "Cotización no encontrada" });
@@ -181,7 +183,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
 router.post("/:id/approve", authenticateToken, (req, res) => {
   try {
     const quotation = quotations.find(
-      (q) => q.id === Number.parseInt(req.params.id)
+      (q) => q.id === Number.parseInt(req.params.id, 10)
     );
     if (!quotation) {
       return res.status(404).json({ message: "Cotización no encontrada" });
@@ -211,7 +213,7 @@ router.post("/:id/approve", authenticateToken, (req, res) => {
 router.post("/:id/reject", authenticateToken, (req, res) => {
   try {
     const quotation = quotations.find(
-      (q) => q.id === Number.parseInt(req.params.id)
+      (q) => q.id === Number.parseInt(req.params.id, 10)
     );
     if (!quotation) {
       return res.status(404).json({ message: "Cotización no encontrada" });
@@ -241,7 +243,7 @@ router.post("/:id/reject", authenticateToken, (req, res) => {
 router.get("/project/:projectId", (req, res) => {
   try {
     const projectQuotations = quotations.filter(
-      (q) => q.projectId === Number.parseInt(req.params.projectId)
+      (q) => q.projectId === Number.parseInt(req.params.projectId, 10)
     );
     res.json(projectQuotations);
   } catch (error) {

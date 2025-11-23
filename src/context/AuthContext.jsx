@@ -42,6 +42,8 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       return { success: true };
     } catch (error) {
+      // Log the error for debugging
+      console.error("Logout error:", error);
       return { success: false, message: "Error al cerrar sesión" };
     }
   };
@@ -54,14 +56,17 @@ export const AuthProvider = ({ children }) => {
     return !!user;
   };
 
-  const value = {
-    user,
-    loading,
-    login,
-    logout,
-    hasRole,
-    isAuthenticated,
-  };
+  const value = React.useMemo(
+    () => ({
+      user,
+      loading,
+      login,
+      logout,
+      hasRole,
+      isAuthenticated,
+    }),
+    [user, loading]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

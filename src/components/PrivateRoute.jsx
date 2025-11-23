@@ -46,7 +46,7 @@ const PrivateRoute = ({ children, requiredRole = null }) => {
             No tienes permisos suficientes para acceder a esta página.
           </p>
           <button
-            onClick={() => window.history.back()}
+            onClick={() => globalThis.history.back()}
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
           >
             Volver

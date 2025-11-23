@@ -29,7 +29,7 @@ export const validateNumber = (value) => {
   if (Number.isNaN(montoNum)) {
     // manejar error
   }
-  return !isNaN(value) && parseFloat(value) > 0;
+  return !Number.isNaN(value) && Number.parseFloat(value) > 0;
 };
 
 export const validateProject = (project) => {

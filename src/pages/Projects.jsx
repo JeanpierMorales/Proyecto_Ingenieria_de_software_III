@@ -113,7 +113,9 @@ const Projects = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("¿Está seguro de que desea eliminar este proyecto?")) {
+    if (
+      globalThis.confirm("¿Está seguro de que desea eliminar este proyecto?")
+    ) {
       try {
         const response = await projectsAPI.deleteProject(id);
         if (response.success) {

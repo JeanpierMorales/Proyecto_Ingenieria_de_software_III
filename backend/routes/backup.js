@@ -1,8 +1,8 @@
 import express from "express";
 const router = express.Router();
 import { authenticateToken } from "./auth.js";
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 // Mock backup data
 let backups = [
@@ -59,16 +59,18 @@ router.get("/", authenticateToken, (req, res) => {
     );
 
     // Paginación
-    const startIndex = (page - 1) * Number.parseInt(limit);
-    const endIndex = startIndex + Number.parseInt(limit);
+    const startIndex = (page - 1) * Number.parseInt(limit, 10);
+    const endIndex = startIndex + Number.parseInt(limit, 10);
     const paginatedBackups = filteredBackups.slice(startIndex, endIndex);
 
     res.json({
       backups: paginatedBackups,
       total: filteredBackups.length,
-      page: Number.parseInt(page),
-      limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredBackups.length / Number.parseInt(limit)),
+      page: Number.parseInt(page, 10),
+      limit: Number.parseInt(limit, 10),
+      totalPages: Math.ceil(
+        filteredBackups.length / Number.parseInt(limit, 10)
+      ),
     });
   } catch (error) {
     console.error("Error obteniendo backups:", error);
@@ -85,7 +87,9 @@ router.get("/:id", authenticateToken, (req, res) => {
         .json({ message: "Solo administradores pueden ver backups" });
     }
 
-    const backup = backups.find((b) => b.id === Number.parseInt(req.params.id));
+    const backup = backups.find(
+      (b) => b.id === Number.parseInt(req.params.id, 10)
+    );
     if (!backup) {
       return res.status(404).json({ message: "Backup no encontrado" });
     }
@@ -139,7 +143,7 @@ router.post("/create", authenticateToken, (req, res) => {
         backup.status = "completed";
         backup.size = type === "full" ? "2.1GB" : "450MB";
         backup.completedAt = new Date();
-        backup.path = `/backups/backup-${new Date().getTime()}-${type}.zip`;
+        backup.path = `/backups/backup-${Date.now()}-${type}.zip`;
       }
     }, 5000);
 
@@ -196,7 +200,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
     }
 
     const backupIndex = backups.findIndex(
-      (b) => b.id === Number.parseInt(req.params.id)
+      (b) => b.id === Number.parseInt(req.params.id, 10)
     );
     if (backupIndex === -1) {
       return res.status(404).json({ message: "Backup no encontrado" });
@@ -272,13 +276,36 @@ router.post("/:id/restore", authenticateToken, (req, res) => {
 });
 
 // GET /api/backup/stats - Estadísticas de backups
-router.get("/stats/summary", authenticateToken, (req, res) => {
+router.get("/stats", authenticateToken, (req, res) => {
   try {
     if (req.user.role !== "admin") {
-      return res.status(403).json({
-        message: "Solo administradores pueden ver estadísticas de backups",
-      });
+      return res
+        .status(403)
+        .json({ message: "Solo administradores pueden ver estadísticas" });
     }
+
+    // GET /api/backup/:id - Obtener backup específico
+    router.get("/:id", authenticateToken, (req, res) => {
+      try {
+        if (req.user.role !== "admin") {
+          return res
+            .status(403)
+            .json({ message: "Solo administradores pueden ver backups" });
+        }
+
+        const backup = backups.find(
+          (b) => b.id === Number.parseInt(req.params.id, 10)
+        );
+        if (!backup) {
+          return res.status(404).json({ message: "Backup no encontrado" });
+        }
+
+        res.json(backup);
+      } catch (error) {
+        console.error("Error obteniendo backup:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
+      }
+    });
 
     const stats = {
       totalBackups: backups.length,
@@ -303,4 +330,4 @@ router.get("/stats/summary", authenticateToken, (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

@@ -130,7 +130,6 @@ router.post("/", authenticateToken, async (req, res) => {
     }
 
     const bcrypt = require("bcryptjs");
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = {
       id: users.length + 1,

@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { Eye, EyeOff, Building2, Lock, Mail } from 'lucide-react';
+import React, { useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { Eye, EyeOff, Building2, Lock, Mail } from "lucide-react";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  
+
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -22,17 +22,17 @@ const Login = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Limpiar errores cuando el usuario empiece a escribir
     if (errors[name] || errors.general) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: '',
-        general: ''
+        [name]: "",
+        general: "",
       }));
     }
   };
@@ -41,12 +41,12 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setErrors({});
-    
+
     // Validaciones básicas
     const newErrors = {};
-    if (!formData.email) newErrors.email = 'El correo es obligatorio';
-    if (!formData.password) newErrors.password = 'La contraseña es obligatoria';
-    
+    if (!formData.email) newErrors.email = "El correo es obligatorio";
+    if (!formData.password) newErrors.password = "La contraseña es obligatoria";
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setLoading(false);
@@ -55,14 +55,15 @@ const Login = () => {
 
     try {
       const result = await login(formData.email, formData.password);
-      
+
       if (result.success) {
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
-        setErrors({ general: result.message || 'Error al iniciar sesión' });
+        setErrors({ general: result.message || "Error al iniciar sesión" });
       }
     } catch (error) {
-      setErrors({ general: 'Error de conexión. Intente nuevamente.' });
+      console.error("Login error:", error);
+      setErrors({ general: "Error de conexión. Intente nuevamente." });
     } finally {
       setLoading(false);
     }
@@ -83,9 +84,7 @@ const Login = () => {
           <h2 className="mt-6 text-3xl font-bold text-white">
             Sistema de Gestión
           </h2>
-          <p className="mt-2 text-sm text-blue-200">
-            Proyectos y Presupuestos
-          </p>
+          <p className="mt-2 text-sm text-blue-200">Proyectos y Presupuestos</p>
         </div>
 
         {/* Formulario de login */}
@@ -96,9 +95,12 @@ const Login = () => {
                 <p className="text-sm text-red-700">{errors.general}</p>
               </div>
             )}
-            
+
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Correo Electrónico
               </label>
               <div className="relative">
@@ -112,7 +114,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   className={`appearance-none relative block w-full pl-10 px-3 py-3 border ${
-                    errors.email ? 'border-red-500' : 'border-gray-300'
+                    errors.email ? "border-red-500" : "border-gray-300"
                   } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
                   placeholder="usuario@empresa.com"
                 />
@@ -123,7 +125,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Contraseña
               </label>
               <div className="relative">
@@ -133,11 +138,11 @@ const Login = () => {
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={handleInputChange}
                   className={`appearance-none relative block w-full pl-10 pr-10 px-3 py-3 border ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
+                    errors.password ? "border-red-500" : "border-gray-300"
                   } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
                   placeholder="Ingrese su contraseña"
                 />
@@ -164,7 +169,7 @@ const Login = () => {
                 disabled={loading}
                 className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
               </button>
             </div>
           </form>
@@ -176,25 +181,39 @@ const Login = () => {
             </p>
             <div className="space-y-2">
               <button
-                onClick={() => handleDemoLogin('admin@empresa.com', '123456')}
+                onClick={() => handleDemoLogin("admin@empresa.com", "123456")}
                 className="w-full text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors"
               >
-                <span className="text-sm font-medium text-gray-900">Administrador</span>
-                <span className="text-xs text-gray-500 block">admin@empresa.com</span>
+                <span className="text-sm font-medium text-gray-900">
+                  Administrador
+                </span>
+                <span className="text-xs text-gray-500 block">
+                  admin@empresa.com
+                </span>
               </button>
               <button
-                onClick={() => handleDemoLogin('analista@empresa.com', '123456')}
+                onClick={() =>
+                  handleDemoLogin("analista@empresa.com", "123456")
+                }
                 className="w-full text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors"
               >
-                <span className="text-sm font-medium text-gray-900">Analista</span>
-                <span className="text-xs text-gray-500 block">analista@empresa.com</span>
+                <span className="text-sm font-medium text-gray-900">
+                  Analista
+                </span>
+                <span className="text-xs text-gray-500 block">
+                  analista@empresa.com
+                </span>
               </button>
               <button
-                onClick={() => handleDemoLogin('cliente@empresa.com', '123456')}
+                onClick={() => handleDemoLogin("cliente@empresa.com", "123456")}
                 className="w-full text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors"
               >
-                <span className="text-sm font-medium text-gray-900">Cliente</span>
-                <span className="text-xs text-gray-500 block">cliente@empresa.com</span>
+                <span className="text-sm font-medium text-gray-900">
+                  Cliente
+                </span>
+                <span className="text-xs text-gray-500 block">
+                  cliente@empresa.com
+                </span>
               </button>
             </div>
           </div>
