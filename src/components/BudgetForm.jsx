@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Plus, X } from "lucide-react";
 import { validateBudget } from "../utils/validations";
 import { projectsAPI } from "../services/api";
