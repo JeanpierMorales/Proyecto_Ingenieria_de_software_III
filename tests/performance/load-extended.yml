@@ -1,0 +1,73 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Normal load"
+    - duration: 180
+      arrivalRate: 20
+      name: "High load"
+    - duration: 60
+      arrivalRate: 50
+      name: "Spike test"
+    - duration: 120
+      arrivalRate: 5
+      name: "Cooldown"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Crear proyecto"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/projects"
+          json:
+            name: "Proyecto Load Test {{ $randomInt(1, 1000) }}"
+            description: "Descripción de prueba de carga"
+            budget: "{{ $randomInt(10000, 100000) }}"
+
+  - name: "Obtener proyectos"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/projects"
+          qs:
+            page: "{{ $randomInt(1, 5) }}"
+            limit: 20
+
+  - name: "Obtener presupuestos"
+    weight: 15
+    flow:
+      - get:
+          url: "/api/budgets"
+
+  - name: "Navegación Dashboard"
+    weight: 15
+    flow:
+      - get:
+          url: "/api/dashboard/stats"
+      - get:
+          url: "/api/dashboard/recent-activity"
+
+  - name: "Obtener reportes"
+    weight: 5
+    flow:
+      - get:
+          url: "/api/reports"
+          qs:
+            type: "monthly"
+            year: "{{ $randomInt(2023, 2025) }}"
+            month: "{{ $randomInt(1, 12) }}"
+
+  - name: "Obtener usuarios"
+    weight: 5
+    flow:
+      - get:
+          url: "/api/users"
+          qs:
+            role: "manager"
