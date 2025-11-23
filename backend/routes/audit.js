@@ -100,7 +100,7 @@ router.get("/", authenticateToken, (req, res) => {
     filteredLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     // Paginación
-    const startIndex = (page - 1) * limit;
+    const startIndex = (page - 1) * Number.parseInt(limit);
     const endIndex = startIndex + Number.parseInt(limit);
     const paginatedLogs = filteredLogs.slice(startIndex, endIndex);
 
@@ -109,7 +109,7 @@ router.get("/", authenticateToken, (req, res) => {
       total: filteredLogs.length,
       page: Number.parseInt(page),
       limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredLogs.length / limit),
+      totalPages: Math.ceil(filteredLogs.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo logs de auditoría:", error);

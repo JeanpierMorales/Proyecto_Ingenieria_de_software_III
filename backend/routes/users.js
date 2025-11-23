@@ -67,16 +67,16 @@ router.get("/", authenticateToken, (req, res) => {
     }
 
     // Paginación
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const startIndex = (page - 1) * Number.parseInt(limit, 10);
+    const endIndex = startIndex + Number.parseInt(limit, 10);
     const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
     res.json({
       users: paginatedUsers,
       total: filteredUsers.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
-      totalPages: Math.ceil(filteredUsers.length / limit),
+      page: Number.parseInt(page, 10),
+      limit: Number.parseInt(limit, 10),
+      totalPages: Math.ceil(filteredUsers.length / Number.parseInt(limit, 10)),
     });
   } catch (error) {
     console.error("Error obteniendo usuarios:", error);
@@ -87,7 +87,7 @@ router.get("/", authenticateToken, (req, res) => {
 // GET /api/users/:id - Obtener usuario por ID
 router.get("/:id", authenticateToken, (req, res) => {
   try {
-    const user = users.find((u) => u.id === parseInt(req.params.id));
+    const user = users.find((u) => u.id === Number.parseInt(req.params.id, 10));
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
@@ -164,7 +164,7 @@ router.post("/", authenticateToken, async (req, res) => {
 // PUT /api/users/:id - Actualizar usuario
 router.put("/:id", authenticateToken, (req, res) => {
   try {
-    const user = users.find((u) => u.id === parseInt(req.params.id));
+    const user = users.find((u) => u.id === Number.parseInt(req.params.id, 10));
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
@@ -207,7 +207,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
         .json({ message: "Solo administradores pueden eliminar usuarios" });
     }
 
-    const user = users.find((u) => u.id === parseInt(req.params.id));
+    const user = users.find((u) => u.id === Number.parseInt(req.params.id, 10));
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }

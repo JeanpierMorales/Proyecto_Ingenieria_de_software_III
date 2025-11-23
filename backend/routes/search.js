@@ -117,7 +117,7 @@ router.get("/", authenticateToken, (req, res) => {
     }
 
     // Limitar resultados
-    results = results.slice(0, parseInt(limit));
+    results = results.slice(0, Number.parseInt(limit));
 
     // Agrupar por tipo
     const groupedResults = results.reduce((acc, item) => {
@@ -181,7 +181,10 @@ router.get("/suggestions", authenticateToken, (req, res) => {
     });
 
     // Convertir a array y limitar
-    const suggestionArray = Array.from(suggestions).slice(0, parseInt(limit));
+    const suggestionArray = Array.from(suggestions).slice(
+      0,
+      Number.parseInt(limit)
+    );
 
     res.json({
       query: searchTerm,
@@ -290,17 +293,17 @@ router.get("/advanced", authenticateToken, (req, res) => {
     }
 
     // Paginación
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const startIndex = (page - 1) * Number.parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedResults = results.slice(startIndex, endIndex);
 
     res.json({
       query: searchTerm,
       filters: { type, category, status, dateFrom, dateTo },
       total: results.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
-      totalPages: Math.ceil(results.length / limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
+      totalPages: Math.ceil(results.length / Number.parseInt(limit)),
       results: paginatedResults,
     });
   } catch (error) {

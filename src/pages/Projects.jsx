@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Search, Filter } from 'lucide-react';
-import ProjectCard from '../components/ProjectCard';
-import { projectsAPI } from '../services/api';
-import { validateProject } from '../utils/validations';
-import { PROJECT_STATUS } from '../utils/constants';
+import React, { useState, useEffect } from "react";
+import { Plus, Search, Filter } from "lucide-react";
+import ProjectCard from "../components/ProjectCard";
+import { projectsAPI } from "../services/api";
+import { validateProject } from "../utils/validations";
+import { PROJECT_STATUS } from "../utils/constants";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const [formData, setFormData] = useState({
-    nombre: '',
-    descripcion: '',
-    presupuesto: '',
-    fechaInicio: '',
-    fechaFin: '',
-    responsable: ''
+    nombre: "",
+    descripcion: "",
+    presupuesto: "",
+    fechaInicio: "",
+    fechaFin: "",
+    responsable: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -35,7 +35,7 @@ const Projects = () => {
         setProjects(response.data);
       }
     } catch (error) {
-      console.error('Error al cargar proyectos:', error);
+      console.error("Error al cargar proyectos:", error);
     } finally {
       setLoading(false);
     }
@@ -43,22 +43,22 @@ const Projects = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validation = validateProject(formData);
     if (!validation.isValid) {
       setErrors(validation.errors);
@@ -66,28 +66,36 @@ const Projects = () => {
     }
 
     try {
+      // Construir projectData correctamente antes de usarlo
       const projectData = {
-        ...formData,
-        presupuesto: parseFloat(formData.presupuesto)
+        nombre: formData.nombre,
+        descripcion: formData.descripcion,
+        presupuesto: Number.parseFloat(formData.presupuesto || "0"),
+        fechaInicio: formData.fechaInicio,
+        fechaFin: formData.fechaFin || null,
+        responsable: formData.responsable,
       };
 
       if (editingProject) {
-        const response = await projectsAPI.updateProject(editingProject.id, projectData);
+        const response = await projectsAPI.updateProject(
+          editingProject.id,
+          projectData
+        );
         if (response.success) {
-          setProjects(prev => 
-            prev.map(p => p.id === editingProject.id ? response.data : p)
+          setProjects((prev) =>
+            prev.map((p) => (p.id === editingProject.id ? response.data : p))
           );
         }
       } else {
         const response = await projectsAPI.createProject(projectData);
         if (response.success) {
-          setProjects(prev => [...prev, response.data]);
+          setProjects((prev) => [...prev, response.data]);
         }
       }
-      
+
       resetForm();
     } catch (error) {
-      console.error('Error al guardar proyecto:', error);
+      console.error("Error al guardar proyecto:", error);
     }
   };
 
@@ -96,49 +104,59 @@ const Projects = () => {
     setFormData({
       nombre: project.nombre,
       descripcion: project.descripcion,
-      presupuesto: project.presupuesto.toString(),
+      presupuesto: (project.presupuesto ?? "").toString(),
       fechaInicio: project.fechaInicio,
-      fechaFin: project.fechaFin || '',
-      responsable: project.responsable
+      fechaFin: project.fechaFin || "",
+      responsable: project.responsable,
     });
     setShowForm(true);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Está seguro de que desea eliminar este proyecto?')) {
+    if (window.confirm("¿Está seguro de que desea eliminar este proyecto?")) {
       try {
         const response = await projectsAPI.deleteProject(id);
         if (response.success) {
-          setProjects(prev => prev.filter(p => p.id !== id));
+          setProjects((prev) => prev.filter((p) => p.id !== id));
         }
       } catch (error) {
-        console.error('Error al eliminar proyecto:', error);
+        console.error("Error al eliminar proyecto:", error);
       }
     }
   };
 
   const handleViewDetails = (project) => {
-    alert(`Detalles del proyecto: ${project.nombre}\n\nDescripción: ${project.descripcion}\nPresupuesto: $${project.presupuesto.toLocaleString()}\nResponsable: ${project.responsable}`);
+    alert(
+      `Detalles del proyecto: ${project.nombre}\n\nDescripción: ${
+        project.descripcion
+      }\nPresupuesto: $${(
+        project.presupuesto ?? 0
+      ).toLocaleString()}\nResponsable: ${project.responsable}`
+    );
   };
 
   const resetForm = () => {
     setFormData({
-      nombre: '',
-      descripcion: '',
-      presupuesto: '',
-      fechaInicio: '',
-      fechaFin: '',
-      responsable: ''
+      nombre: "",
+      descripcion: "",
+      presupuesto: "",
+      fechaInicio: "",
+      fechaFin: "",
+      responsable: "",
     });
     setErrors({});
     setEditingProject(null);
     setShowForm(false);
   };
 
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === '' || project.estado === statusFilter;
+  const filteredProjects = projects.filter((project) => {
+    const matchesSearch =
+      (project.nombre ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (project.descripcion ?? "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "" || project.estado === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -155,7 +173,9 @@ const Projects = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Gestión de Proyectos</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Gestión de Proyectos
+          </h1>
           <p className="mt-1 text-sm text-gray-600">
             Administra y supervisa todos los proyectos activos
           </p>
@@ -207,10 +227,10 @@ const Projects = () => {
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">
-                {editingProject ? 'Editar Proyecto' : 'Nuevo Proyecto'}
+                {editingProject ? "Editar Proyecto" : "Nuevo Proyecto"}
               </h3>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
@@ -223,7 +243,7 @@ const Projects = () => {
                     value={formData.nombre}
                     onChange={handleInputChange}
                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.nombre ? 'border-red-500' : 'border-gray-300'
+                      errors.nombre ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Ej: Sistema de Inventario"
                   />
@@ -242,12 +262,14 @@ const Projects = () => {
                     onChange={handleInputChange}
                     rows="3"
                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.descripcion ? 'border-red-500' : 'border-gray-300'
+                      errors.descripcion ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Descripción detallada del proyecto..."
                   />
                   {errors.descripcion && (
-                    <p className="mt-1 text-sm text-red-600">{errors.descripcion}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.descripcion}
+                    </p>
                   )}
                 </div>
 
@@ -262,12 +284,14 @@ const Projects = () => {
                     onChange={handleInputChange}
                     step="0.01"
                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.presupuesto ? 'border-red-500' : 'border-gray-300'
+                      errors.presupuesto ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="0.00"
                   />
                   {errors.presupuesto && (
-                    <p className="mt-1 text-sm text-red-600">{errors.presupuesto}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.presupuesto}
+                    </p>
                   )}
                 </div>
 
@@ -295,11 +319,13 @@ const Projects = () => {
                     value={formData.fechaInicio}
                     onChange={handleInputChange}
                     className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.fechaInicio ? 'border-red-500' : 'border-gray-300'
+                      errors.fechaInicio ? "border-red-500" : "border-gray-300"
                     }`}
                   />
                   {errors.fechaInicio && (
-                    <p className="mt-1 text-sm text-red-600">{errors.fechaInicio}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.fechaInicio}
+                    </p>
                   )}
                 </div>
 
@@ -329,7 +355,7 @@ const Projects = () => {
                   type="submit"
                   className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                 >
-                  {editingProject ? 'Actualizar' : 'Crear Proyecto'}
+                  {editingProject ? "Actualizar" : "Crear Proyecto"}
                 </button>
               </div>
             </form>
@@ -344,13 +370,14 @@ const Projects = () => {
             <Plus className="w-12 h-12 text-gray-400" />
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {searchTerm || statusFilter ? 'No se encontraron proyectos' : 'No hay proyectos'}
+            {searchTerm || statusFilter
+              ? "No se encontraron proyectos"
+              : "No hay proyectos"}
           </h3>
           <p className="text-gray-600 mb-4">
-            {searchTerm || statusFilter 
-              ? 'Intenta ajustar los filtros de búsqueda' 
-              : 'Comienza creando tu primer proyecto'
-            }
+            {searchTerm || statusFilter
+              ? "Intenta ajustar los filtros de búsqueda"
+              : "Comienza creando tu primer proyecto"}
           </p>
           {!searchTerm && !statusFilter && (
             <button

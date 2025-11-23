@@ -88,7 +88,7 @@ router.get("/", authenticateToken, (req, res) => {
     }
 
     // Paginación
-    const startIndex = (page - 1) * limit;
+    const startIndex = (page - 1) * Number.parseInt(limit);
     const endIndex = startIndex + Number.parseInt(limit);
     const paginatedFiles = filteredFiles.slice(startIndex, endIndex);
 
@@ -97,7 +97,7 @@ router.get("/", authenticateToken, (req, res) => {
       total: filteredFiles.length,
       page: Number.parseInt(page),
       limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredFiles.length / limit),
+      totalPages: Math.ceil(filteredFiles.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo archivos:", error);
@@ -147,7 +147,7 @@ router.post(
         mimetype: req.file.mimetype,
         size: req.file.size,
         path: `/uploads/${req.file.filename}`,
-        projectId: parseInt(projectId),
+        projectId: Number.parseInt(projectId),
         uploadedBy: req.user.id,
         uploadedAt: new Date(),
       };

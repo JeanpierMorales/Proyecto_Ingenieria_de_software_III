@@ -80,7 +80,7 @@ router.get("/", authenticateToken, (req, res) => {
     );
 
     // Paginación
-    const startIndex = (page - 1) * limit;
+    const startIndex = (page - 1) * Number.parseInt(limit);
     const endIndex = startIndex + Number.parseInt(limit);
     const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
 
@@ -89,7 +89,7 @@ router.get("/", authenticateToken, (req, res) => {
       total: filteredOrders.length,
       page: Number.parseInt(page),
       limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredOrders.length / limit),
+      totalPages: Math.ceil(filteredOrders.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo órdenes de compra:", error);
@@ -140,7 +140,7 @@ router.post("/", authenticateToken, (req, res) => {
       id: purchaseOrders.length + 1,
       number: orderNumber,
       supplier,
-      projectId: parseInt(projectId),
+      projectId: Number.parseInt(projectId),
       items,
       totalAmount,
       status: "pending",

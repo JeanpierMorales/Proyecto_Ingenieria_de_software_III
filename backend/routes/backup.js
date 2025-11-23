@@ -59,7 +59,7 @@ router.get("/", authenticateToken, (req, res) => {
     );
 
     // Paginación
-    const startIndex = (page - 1) * limit;
+    const startIndex = (page - 1) * Number.parseInt(limit);
     const endIndex = startIndex + Number.parseInt(limit);
     const paginatedBackups = filteredBackups.slice(startIndex, endIndex);
 
@@ -68,7 +68,7 @@ router.get("/", authenticateToken, (req, res) => {
       total: filteredBackups.length,
       page: Number.parseInt(page),
       limit: Number.parseInt(limit),
-      totalPages: Math.ceil(filteredBackups.length / limit),
+      totalPages: Math.ceil(filteredBackups.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo backups:", error);
@@ -85,7 +85,7 @@ router.get("/:id", authenticateToken, (req, res) => {
         .json({ message: "Solo administradores pueden ver backups" });
     }
 
-    const backup = backups.find((b) => b.id === parseInt(req.params.id));
+    const backup = backups.find((b) => b.id === Number.parseInt(req.params.id));
     if (!backup) {
       return res.status(404).json({ message: "Backup no encontrado" });
     }
