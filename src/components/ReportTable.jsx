@@ -1,48 +1,60 @@
-import React from 'react';
-import { Calendar, Eye, Edit, BarChart3, CheckCircle, Clock } from 'lucide-react';
+import React from "react";
+import {
+  Calendar,
+  Eye,
+  Edit,
+  BarChart3,
+  CheckCircle,
+  Clock,
+} from "lucide-react";
+import PropTypes from "prop-types";
 
 const ReportTable = ({ reports, onEdit, onView }) => {
   const getStatusColor = (estado) => {
     const colors = {
-      'completado': 'bg-green-100 text-green-800',
-      'en_revision': 'bg-yellow-100 text-yellow-800',
-      'pendiente': 'bg-red-100 text-red-800'
+      completado: "bg-green-100 text-green-800",
+      en_revision: "bg-yellow-100 text-yellow-800",
+      pendiente: "bg-red-100 text-red-800",
     };
-    return colors[estado] || 'bg-gray-100 text-gray-800';
+    return colors[estado] || "bg-gray-100 text-gray-800";
   };
 
   const getStatusText = (estado) => {
     const texts = {
-      'completado': 'Completado',
-      'en_revision': 'En Revisión',
-      'pendiente': 'Pendiente'
+      completado: "Completado",
+      en_revision: "En Revisión",
+      pendiente: "Pendiente",
     };
     return texts[estado] || estado;
   };
 
   const getStatusIcon = (estado) => {
     const icons = {
-      'completado': CheckCircle,
-      'en_revision': Clock,
-      'pendiente': Clock
+      completado: CheckCircle,
+      en_revision: Clock,
+      pendiente: Clock,
     };
     const IconComponent = icons[estado] || Clock;
     return <IconComponent className="w-4 h-4" />;
   };
 
   const getProgressColor = (progreso) => {
-    if (progreso >= 80) return 'bg-green-500';
-    if (progreso >= 50) return 'bg-yellow-500';
-    if (progreso >= 25) return 'bg-blue-500';
-    return 'bg-red-500';
+    if (progreso >= 80) return "bg-green-500";
+    if (progreso >= 50) return "bg-yellow-500";
+    if (progreso >= 25) return "bg-blue-500";
+    return "bg-red-500";
   };
 
   if (reports.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-md p-8 text-center">
         <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No hay reportes</h3>
-        <p className="text-gray-600">No se encontraron reportes para mostrar.</p>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          No hay reportes
+        </h3>
+        <p className="text-gray-600">
+          No se encontraron reportes para mostrar.
+        </p>
       </div>
     );
   }
@@ -50,9 +62,11 @@ const ReportTable = ({ reports, onEdit, onView }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Reportes de Proyecto</h3>
+        <h3 className="text-lg font-semibold text-gray-900">
+          Reportes de Proyecto
+        </h3>
       </div>
-      
+
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50">
@@ -79,7 +93,10 @@ const ReportTable = ({ reports, onEdit, onView }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {reports.map((report) => (
-              <tr key={report.id} className="hover:bg-gray-50 transition-colors">
+              <tr
+                key={report.id}
+                className="hover:bg-gray-50 transition-colors"
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
                     <div className="text-sm font-medium text-gray-900">
@@ -102,7 +119,11 @@ const ReportTable = ({ reports, onEdit, onView }) => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(report.estado)}`}>
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                      report.estado
+                    )}`}
+                  >
                     <span className="mr-1">{getStatusIcon(report.estado)}</span>
                     {getStatusText(report.estado)}
                   </span>
@@ -111,7 +132,9 @@ const ReportTable = ({ reports, onEdit, onView }) => {
                   <div className="flex items-center">
                     <div className="w-16 bg-gray-200 rounded-full h-2 mr-3">
                       <div
-                        className={`h-2 rounded-full ${getProgressColor(report.progreso)}`}
+                        className={`h-2 rounded-full ${getProgressColor(
+                          report.progreso
+                        )}`}
                         style={{ width: `${report.progreso}%` }}
                       />
                     </div>
@@ -145,6 +168,12 @@ const ReportTable = ({ reports, onEdit, onView }) => {
       </div>
     </div>
   );
+};
+
+ReportTable.propTypes = {
+  reports: PropTypes.arrayOf(PropTypes.object),
+  onEdit: PropTypes.func,
+  onView: PropTypes.func,
 };
 
 export default ReportTable;

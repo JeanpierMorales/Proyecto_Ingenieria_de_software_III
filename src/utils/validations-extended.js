@@ -231,3 +231,8 @@ export const validateQuotation = (quotation) => {
     errors,
   };
 };
+
+const val = Number.parseFloat(someValue);
+if (Number.isNaN(val)) {
+  // manejar error
+}

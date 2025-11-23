@@ -157,10 +157,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
 
       <form onSubmit={handleSubmit} className="p-6 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="nombre"
+            className="block text-sm font-medium text-gray-700"
+          >
             Nombre
           </label>
           <input
+            id="nombre"
             name="nombre"
             value={formData.nombre}
             onChange={handleInputChange}
@@ -173,10 +177,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="descripcion"
+            className="block text-sm font-medium text-gray-700"
+          >
             Descripción
           </label>
           <textarea
+            id="descripcion"
             name="descripcion"
             value={formData.descripcion}
             onChange={handleInputChange}
@@ -191,10 +199,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="proyectoId"
+              className="block text-sm font-medium text-gray-700"
+            >
               Proyecto
             </label>
             <select
+              id="proyectoId"
               name="proyectoId"
               value={formData.proyectoId}
               onChange={handleInputChange}
@@ -216,10 +228,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="monto"
+              className="block text-sm font-medium text-gray-700"
+            >
               Monto total
             </label>
             <input
+              id="monto"
               name="monto"
               value={formData.monto}
               readOnly
@@ -254,8 +270,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
                 className="border rounded p-3 grid grid-cols-6 gap-2 items-end"
               >
                 <div className="col-span-2">
-                  <label className="text-sm text-gray-600">Concepto</label>
+                  <label
+                    htmlFor={`concepto-${idx}`}
+                    className="text-sm text-gray-600"
+                  >
+                    Concepto
+                  </label>
                   <input
+                    id={`concepto-${idx}`}
                     value={item.concepto}
                     onChange={(e) =>
                       updateItem(idx, "concepto", e.target.value)
@@ -266,8 +288,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
                 </div>
 
                 <div>
-                  <label className="text-sm text-gray-600">Cantidad</label>
+                  <label
+                    htmlFor={`cantidad-${idx}`}
+                    className="text-sm text-gray-600"
+                  >
+                    Cantidad
+                  </label>
                   <input
+                    id={`cantidad-${idx}`}
                     type="number"
                     step="any"
                     value={item.cantidad}
@@ -280,10 +308,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
                 </div>
 
                 <div>
-                  <label className="text-sm text-gray-600">
+                  <label
+                    htmlFor={`precioUnitario-${idx}`}
+                    className="text-sm text-gray-600"
+                  >
                     Precio unitario
                   </label>
                   <input
+                    id={`precioUnitario-${idx}`}
                     type="number"
                     step="any"
                     value={item.precioUnitario}
@@ -296,8 +328,14 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
                 </div>
 
                 <div>
-                  <label className="text-sm text-gray-600">Total</label>
+                  <label
+                    htmlFor={`total-${idx}`}
+                    className="text-sm text-gray-600"
+                  >
+                    Total
+                  </label>
                   <input
+                    id={`total-${idx}`}
                     value={String(item.total ?? 0)}
                     readOnly
                     className="mt-1 block w-full border rounded p-1 bg-gray-50"

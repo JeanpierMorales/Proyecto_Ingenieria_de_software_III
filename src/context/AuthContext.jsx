@@ -1,12 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authService } from '../services/auth';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { authService } from "../services/auth";
+import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
+    throw new Error("useAuth debe ser usado dentro de un AuthProvider");
   }
   return context;
 };
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       return { success: true };
     } catch (error) {
-      return { success: false, message: 'Error al cerrar sesión' };
+      return { success: false, message: "Error al cerrar sesión" };
     }
   };
 
@@ -59,14 +60,14 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     hasRole,
-    isAuthenticated
+    isAuthenticated,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export { AuthContext }
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export { AuthContext };

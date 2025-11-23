@@ -25,6 +25,10 @@ export const validateRequired = (value) => {
 };
 
 export const validateNumber = (value) => {
+  const montoNum = Number.parseFloat(value);
+  if (Number.isNaN(montoNum)) {
+    // manejar error
+  }
   return !isNaN(value) && parseFloat(value) > 0;
 };
 

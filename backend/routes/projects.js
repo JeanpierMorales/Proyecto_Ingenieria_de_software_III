@@ -112,7 +112,7 @@ router.post("/", authenticateToken, (req, res) => {
       id: projects.length + 1,
       name,
       description,
-      budget: parseFloat(budget),
+      budget: Number.parseFloat(budget),
       status,
       createdBy: req.user.id,
       createdAt: new Date(),
@@ -159,7 +159,7 @@ router.put("/:id", authenticateToken, (req, res) => {
           .status(400)
           .json({ message: "El presupuesto debe ser positivo" });
       }
-      project.budget = parseFloat(budget);
+      project.budget = Number.parseFloat(budget);
     }
     if (status) project.status = status;
     project.updatedAt = new Date();
