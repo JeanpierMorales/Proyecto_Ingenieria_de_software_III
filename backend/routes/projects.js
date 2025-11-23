@@ -57,14 +57,14 @@ router.get("/", (req, res) => {
 
     // Paginación
     const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedProjects = filteredProjects.slice(startIndex, endIndex);
 
     res.json({
       projects: paginatedProjects,
       total: filteredProjects.length,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
       totalPages: Math.ceil(filteredProjects.length / limit),
     });
   } catch (error) {
@@ -76,7 +76,9 @@ router.get("/", (req, res) => {
 // GET /api/projects/:id - Obtener proyecto por ID
 router.get("/:id", (req, res) => {
   try {
-    const project = projects.find((p) => p.id === parseInt(req.params.id));
+    const project = projects.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
     }
@@ -132,7 +134,9 @@ router.post("/", authenticateToken, (req, res) => {
 // PUT /api/projects/:id - Actualizar proyecto
 router.put("/:id", authenticateToken, (req, res) => {
   try {
-    const project = projects.find((p) => p.id === parseInt(req.params.id));
+    const project = projects.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
     }
@@ -174,7 +178,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const projectIndex = projects.findIndex(
-      (p) => p.id === parseInt(req.params.id)
+      (p) => p.id === Number.parseInt(req.params.id)
     );
     if (projectIndex === -1) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
@@ -201,7 +205,9 @@ router.delete("/:id", authenticateToken, (req, res) => {
 // GET /api/projects/:id/tasks - Obtener tareas de un proyecto
 router.get("/:id/tasks", (req, res) => {
   try {
-    const project = projects.find((p) => p.id === parseInt(req.params.id));
+    const project = projects.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
     }
@@ -238,7 +244,9 @@ router.get("/:id/tasks", (req, res) => {
 // POST /api/projects/:id/tasks - Crear tarea para un proyecto
 router.post("/:id/tasks", authenticateToken, (req, res) => {
   try {
-    const project = projects.find((p) => p.id === parseInt(req.params.id));
+    const project = projects.find(
+      (p) => p.id === Number.parseInt(req.params.id)
+    );
     if (!project) {
       return res.status(404).json({ message: "Proyecto no encontrado" });
     }

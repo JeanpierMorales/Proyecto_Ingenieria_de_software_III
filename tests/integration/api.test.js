@@ -177,19 +177,18 @@ describe("Casos de Prueba API", () => {
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThan(0);
       expect(response.body[0]).toHaveProperty("id");
-      expect(response.body[0]).toHaveProperty("nombre");
-      expect(response.body[0]).toHaveProperty("descripcion");
-      expect(response.body[0]).toHaveProperty("presupuesto");
+      expect(response.body[0]).toHaveProperty("name");
+      expect(response.body[0]).toHaveProperty("description");
+      expect(response.body[0]).toHaveProperty("budget");
     });
   });
 
   describe("🧩 CP_002 – Crear Proyecto", () => {
     test("POST /api/projects - debe crear proyecto válido", async () => {
       const newProject = {
-        nombre: "Nuevo Proyecto",
-        descripcion: "Descripción Nueva",
-        presupuesto: 20000,
-        fechaInicio: "01/01/2024",
+        name: "Nuevo Proyecto",
+        description: "Descripción Nueva",
+        budget: 20000,
       };
 
       const response = await request(app)
@@ -199,10 +198,9 @@ describe("Casos de Prueba API", () => {
       expect(response.status).toBe(201);
       expect(response.body.message).toBe("Proyecto registrado con éxito");
       expect(response.body.data).toHaveProperty("id");
-      expect(response.body.data.nombre).toBe(newProject.nombre);
-      expect(response.body.data.descripcion).toBe(newProject.descripcion);
-      expect(response.body.data.presupuesto).toBe(newProject.presupuesto);
-      expect(response.body.data.fechaInicio).toBe(newProject.fechaInicio);
+      expect(response.body.data.name).toBe(newProject.name);
+      expect(response.body.data.description).toBe(newProject.description);
+      expect(response.body.data.budget).toBe(newProject.budget);
     });
   });
 
@@ -263,18 +261,18 @@ describe("Casos de Prueba API", () => {
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThan(0);
       expect(response.body[0]).toHaveProperty("id");
-      expect(response.body[0]).toHaveProperty("titulo");
-      expect(response.body[0]).toHaveProperty("tipo");
-      expect(response.body[0]).toHaveProperty("proyectoId");
+      expect(response.body[0]).toHaveProperty("title");
+      expect(response.body[0]).toHaveProperty("type");
+      expect(response.body[0]).toHaveProperty("projectId");
     });
   });
 
   describe("🧩 CP_008 – Crear Reporte", () => {
     test("POST /api/reports - debe crear reporte válido", async () => {
       const newReport = {
-        titulo: "Nuevo Reporte",
-        tipo: "mensual",
-        proyectoId: 1,
+        title: "Nuevo Reporte",
+        type: "mensual",
+        projectId: 1,
       };
 
       const response = await request(app).post("/api/reports").send(newReport);
@@ -282,9 +280,9 @@ describe("Casos de Prueba API", () => {
       expect(response.status).toBe(201);
       expect(response.body.message).toBe("Reporte creado exitosamente");
       expect(response.body.data).toHaveProperty("id");
-      expect(response.body.data.titulo).toBe(newReport.titulo);
-      expect(response.body.data.tipo).toBe(newReport.tipo);
-      expect(response.body.data.proyectoId).toBe(newReport.proyectoId);
+      expect(response.body.data.title).toBe(newReport.title);
+      expect(response.body.data.type).toBe(newReport.type);
+      expect(response.body.data.projectId).toBe(newReport.projectId);
     });
   });
 

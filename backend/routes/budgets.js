@@ -39,7 +39,7 @@ router.get("/", (req, res) => {
 // GET /api/budgets/:id - Obtener presupuesto por ID
 router.get("/:id", (req, res) => {
   try {
-    const budget = budgets.find((b) => b.id === parseInt(req.params.id));
+    const budget = budgets.find((b) => b.id === Number.parseInt(req.params.id));
     if (!budget) {
       return res.status(404).json({ message: "Presupuesto no encontrado" });
     }
@@ -71,7 +71,7 @@ router.post("/", authenticateToken, (req, res) => {
 
     const newBudget = {
       id: budgets.length + 1,
-      projectId: parseInt(projectId),
+      projectId: Number.parseInt(projectId),
       amount: parseFloat(amount),
       spent: 0,
       remaining: parseFloat(amount),
@@ -95,7 +95,7 @@ router.post("/", authenticateToken, (req, res) => {
 // PUT /api/budgets/:id - Actualizar presupuesto
 router.put("/:id", authenticateToken, (req, res) => {
   try {
-    const budget = budgets.find((b) => b.id === parseInt(req.params.id));
+    const budget = budgets.find((b) => b.id === Number.parseInt(req.params.id));
     if (!budget) {
       return res.status(404).json({ message: "Presupuesto no encontrado" });
     }
@@ -130,7 +130,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const budgetIndex = budgets.findIndex(
-      (b) => b.id === parseInt(req.params.id)
+      (b) => b.id === Number.parseInt(req.params.id)
     );
     if (budgetIndex === -1) {
       return res.status(404).json({ message: "Presupuesto no encontrado" });
@@ -156,7 +156,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
 router.get("/project/:projectId", (req, res) => {
   try {
     const budget = budgets.find(
-      (b) => b.projectId === parseInt(req.params.projectId)
+      (b) => b.projectId === Number.parseInt(req.params.projectId)
     );
     if (!budget) {
       return res
@@ -170,10 +170,10 @@ router.get("/project/:projectId", (req, res) => {
   }
 });
 
-// POST /api/budgets/:id/approve - Aprobar presupuesto
+/m POST /api/budgets/:id/approve - Aprobar presupuesto
 router.post("/:id/approve", authenticateToken, (req, res) => {
   try {
-    const budget = budgets.find((b) => b.id === parseInt(req.params.id));
+    const budget = budgets.find((b) => b.id === Number.parseInt(req.params.id));
     if (!budget) {
       return res.status(404).json({ message: "Presupuesto no encontrado" });
     }
@@ -198,10 +198,10 @@ router.post("/:id/approve", authenticateToken, (req, res) => {
   }
 });
 
-// POST /api/budgets/:id/reject - Rechazar presupuesto
+/m POST /api/budgets/:id/reject - Rechazar presupuesto
 router.post("/:id/reject", authenticateToken, (req, res) => {
   try {
-    const budget = budgets.find((b) => b.id === parseInt(req.params.id));
+    const budget = budgets.find((b) => b.id === Number.parseInt(req.params.id));
     if (!budget) {
       return res.status(404).json({ message: "Presupuesto no encontrado" });
     }
