@@ -14,7 +14,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("1. Navegación al Dashboard - Verificar carga inicial", async () => {
-    await page.goto("http://localhost:3000/dashboard");
+    await page.goto("http://localhost:5173/dashboard");
     const title = await page.title();
     expect(title).toBe("Dashboard");
     const dashboardElement = await page.$(
@@ -24,7 +24,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("2. Interacción con formulario de proyecto - Completar campos", async () => {
-    await page.goto("http://localhost:3000/projects/new");
+    await page.goto("http://localhost:5173/projects/new");
     await page.type('[data-testid="project-name"]', "Proyecto de Prueba");
     await page.type(
       '[data-testid="project-description"]',
@@ -40,7 +40,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("3. Navegación entre páginas - Usar menú de navegación", async () => {
-    await page.goto("http://localhost:3000/dashboard");
+    await page.goto("http://localhost:5173/dashboard");
     await page.click('[data-testid="nav-quotations"]');
     await page.waitForSelector('[data-testid="quotations-page"]');
     const url = page.url();
@@ -48,7 +48,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("4. Validación de formulario - Mensajes de error visibles", async () => {
-    await page.goto("http://localhost:3000/projects/new");
+    await page.goto("http://localhost:5173/projects/new");
     await page.click('[data-testid="submit-project"]');
     await page.waitForSelector('[data-testid="error-name"]');
     const error = await page.$eval(
@@ -59,7 +59,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("5. Accesibilidad - Elementos con etiquetas adecuadas", async () => {
-    await page.goto("http://localhost:3000/dashboard");
+    await page.goto("http://localhost:5173/dashboard");
     const inputs = await page.$$("input");
     for (const input of inputs) {
       const ariaLabel = await page.evaluate(
@@ -71,7 +71,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("6. Respuesta visual - Cambios en hover", async () => {
-    await page.goto("http://localhost:3000/dashboard");
+    await page.goto("http://localhost:5173/dashboard");
     const button = await page.$('[data-testid="action-button"]');
     const initialColor = await page.evaluate(
       (el) => getComputedStyle(el).backgroundColor,
@@ -86,7 +86,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("7. Flujo completo - Crear y editar proyecto", async () => {
-    await page.goto("http://localhost:3000/projects/new");
+    await page.goto("http://localhost:5173/projects/new");
     await page.type('[data-testid="project-name"]', "Proyecto Completo");
     await page.type(
       '[data-testid="project-description"]',
@@ -105,7 +105,7 @@ describe("Pruebas de Usabilidad", () => {
   });
 
   test("8. Manejo de errores - Página 404", async () => {
-    await page.goto("http://localhost:3000/nonexistent");
+    await page.goto("http://localhost:5173/nonexistent");
     const errorMessage = await page.$eval(
       '[data-testid="404-message"]',
       (el) => el.textContent
@@ -115,7 +115,7 @@ describe("Pruebas de Usabilidad", () => {
 
   test("9. Rendimiento de carga - Tiempo de respuesta", async () => {
     const startTime = Date.now();
-    await page.goto("http://localhost:3000/dashboard");
+    await page.goto("http://localhost:5173/dashboard");
     await page.waitForSelector('[data-testid="dashboard-container"]');
     const loadTime = Date.now() - startTime;
     expect(loadTime).toBeLessThan(3000); // Menos de 3 segundos
@@ -123,7 +123,7 @@ describe("Pruebas de Usabilidad", () => {
 
   test("10. Compatibilidad móvil - Vista responsive", async () => {
     await page.setViewport({ width: 375, height: 667 });
-    await page.goto("http://localhost:3000/dashboard");
+    await page.goto("http://localhost:5173/dashboard");
     const menu = await page.$('[data-testid="mobile-menu"]');
     expect(menu).toBeTruthy();
     const isVisible = await page.evaluate((el) => el.offsetWidth > 0, menu);

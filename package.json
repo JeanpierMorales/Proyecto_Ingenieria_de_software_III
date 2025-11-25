@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3000",
+    "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:unit": "jest tests/unit/",
+    "test:unit": "jest tests/unit/ --verbose",
     "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration/",
     "test:regression": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/regression/",
     "test:security": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/security/",
