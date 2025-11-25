@@ -4,14 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
+    "dev": "vite --port 3000",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:performance": "artillery run tests/performance/load.test.yml"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:unit": "jest tests/unit/",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/integration/",
+    "test:regression": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/regression/",
+    "test:security": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/security/",
+    "test:performance": "node --experimental-vm-modules node_modules/jest/bin/jest.js tests/performance/",
+    "test:usability": "jest tests/usability/"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
