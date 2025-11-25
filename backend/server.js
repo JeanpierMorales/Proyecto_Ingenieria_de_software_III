@@ -3,9 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import path from "path";
-import fsPromises from "fs/promises";
-import { fileURLToPath } from "node:url";
-import { dirname } from "path";
+import fs from "fs/promises";
 
 // Importar rutas
 import authRoutes from "./routes/auth.js";
@@ -78,19 +76,11 @@ app.use((req, res, next) => {
 });
 
 // Static files
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-// Ejemplo: cargar configuración async en top-level
-const configFile = path.join(__dirname, "config.json");
-let config = {};
-try {
-  const raw = await fsPromises.readFile(configFile, "utf8");
-  config = JSON.parse(raw);
-} catch (err) {
-  console.warn("No se pudo leer config.json, usando valores por defecto");
-}
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

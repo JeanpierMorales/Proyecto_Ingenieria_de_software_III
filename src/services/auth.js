@@ -76,24 +76,3 @@ export const authService = {
 };
 
 // Integración futura con backend pendiente
-
-export async function login(credentials) {
-  try {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.message || "Error en login");
-    }
-    const data = await res.json();
-    // guardar token en localStorage/session
-    localStorage.setItem("token", data.token);
-    return { success: true, data };
-  } catch (err) {
-    console.error("auth.login error:", err);
-    return { success: false, message: err.message };
-  }
-}

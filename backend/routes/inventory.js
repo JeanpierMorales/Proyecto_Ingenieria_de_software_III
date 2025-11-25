@@ -380,40 +380,4 @@ router.get("/stats/summary", authenticateToken, (req, res) => {
   }
 });
 
-function validateInventoryPayload(payload) {
-  const errors = [];
-  if (!payload.itemId) errors.push("itemId es requerido");
-  if (
-    payload.quantity == null ||
-    Number.isNaN(Number.parseInt(payload.quantity, 10))
-  )
-    errors.push("quantity inválida");
-  return errors;
-}
-
-async function updateInventoryItem(itemId, change) {
-  const item = inventory.find((i) => i.id === Number.parseInt(itemId, 10));
-  if (!item) throw new Error("Item no encontrado");
-  item.stock = Math.max(0, item.stock + change);
-  item.updatedAt = new Date();
-  return item;
-}
-
-router.put("/adjust", authenticateToken, async (req, res) => {
-  try {
-    const errors = validateInventoryPayload(req.body);
-    if (errors.length) return res.status(400).json({ errors });
-
-    const { itemId, quantity } = req.body;
-    const updated = await updateInventoryItem(
-      itemId,
-      Number.parseInt(quantity, 10)
-    );
-    res.json({ success: true, item: updated });
-  } catch (err) {
-    console.error("Error ajustando inventario:", err);
-    res.status(500).json({ message: "Error interno ajustando inventario" });
-  }
-});
-
 export default router;

@@ -9,7 +9,15 @@ jest.mock("../../backend/db", () => ({
 }));
 
 // Importar APIs después del mock
-import { projectsAPI, usersAPI } from "../../src/services/api.js";
+import {
+  projectsAPI,
+  budgetsAPI,
+  reportsAPI,
+  usersAPI,
+  purchasesAPI,
+  strategiesAPI,
+  quotationsAPI,
+} from "../../src/services/api.js";
 
 // Función auxiliar para crear app de prueba
 const createTestApp = () => {
@@ -50,10 +58,12 @@ const createTestApp = () => {
         nombre.includes("<") ||
         nombre.includes(">")
       ) {
-        return res.status(400).json({
-          success: false,
-          message: "Nombre contiene caracteres no permitidos",
-        });
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Nombre contiene caracteres no permitidos",
+          });
       }
 
       if (
@@ -72,10 +82,12 @@ const createTestApp = () => {
         descripcion.includes("onerror") ||
         descripcion.includes("<img")
       ) {
-        return res.status(400).json({
-          success: false,
-          message: "Descripción contiene contenido no permitido",
-        });
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Descripción contiene contenido no permitido",
+          });
       }
 
       if (!presupuesto || isNaN(presupuesto) || presupuesto <= 0) {

@@ -59,16 +59,18 @@ router.get("/", authenticateToken, (req, res) => {
     );
 
     // Paginación
-    const pageNum = Number.parseInt(req.query.page ?? "1", 10);
-    const limitNum = Number.parseInt(req.query.limit ?? "50", 10);
-    const start = (pageNum - 1) * limitNum;
-    const paged = backups.slice(start, start + limitNum);
+    const startIndex = (page - 1) * Number.parseInt(limit, 10);
+    const endIndex = startIndex + Number.parseInt(limit, 10);
+    const paginatedBackups = filteredBackups.slice(startIndex, endIndex);
 
     res.json({
-      data: paged,
-      page: pageNum,
-      limit: limitNum,
-      total: backups.length,
+      backups: paginatedBackups,
+      total: filteredBackups.length,
+      page: Number.parseInt(page, 10),
+      limit: Number.parseInt(limit, 10),
+      totalPages: Math.ceil(
+        filteredBackups.length / Number.parseInt(limit, 10)
+      ),
     });
   } catch (error) {
     console.error("Error obteniendo backups:", error);

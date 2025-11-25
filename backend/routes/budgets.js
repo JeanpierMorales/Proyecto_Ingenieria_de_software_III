@@ -170,6 +170,7 @@ router.get("/project/:projectId", (req, res) => {
   }
 });
 
+/m POST /api/budgets/:id/approve - Aprobar presupuesto
 router.post("/:id/approve", authenticateToken, (req, res) => {
   try {
     const budget = budgets.find((b) => b.id === Number.parseInt(req.params.id));
@@ -197,6 +198,7 @@ router.post("/:id/approve", authenticateToken, (req, res) => {
   }
 });
 
+/m POST /api/budgets/:id/reject - Rechazar presupuesto
 router.post("/:id/reject", authenticateToken, (req, res) => {
   try {
     const budget = budgets.find((b) => b.id === Number.parseInt(req.params.id));
