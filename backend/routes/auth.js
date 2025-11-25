@@ -204,5 +204,4 @@ router.put("/change-password", authenticateToken, async (req, res) => {
   }
 });
 
-export default router;
-export { authenticateToken };
+export { router as default, authenticateToken };

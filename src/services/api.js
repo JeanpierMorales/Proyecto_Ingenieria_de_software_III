@@ -226,7 +226,7 @@ export const projectsAPI = {
 
   async updateProject(id, project) {
     await simulateNetworkDelay();
-    const index = MOCK_PROJECTS.findIndex((p) => p.id === Number.parseInt(id));
+    const index = MOCK_PROJECTS.findIndex((p) => p.id === parseInt(id));
     if (index !== -1) {
       MOCK_PROJECTS[index] = { ...MOCK_PROJECTS[index], ...project };
       return { success: true, data: MOCK_PROJECTS[index] };
@@ -236,7 +236,7 @@ export const projectsAPI = {
 
   async deleteProject(id) {
     await simulateNetworkDelay();
-    const index = MOCK_PROJECTS.findIndex((p) => p.id === Number.parseInt(id));
+    const index = MOCK_PROJECTS.findIndex((p) => p.id === parseInt(id));
     if (index !== -1) {
       MOCK_PROJECTS.splice(index, 1);
       return { success: true };
@@ -287,7 +287,7 @@ export const reportsAPI = {
 
   async updateReport(id, report) {
     await simulateNetworkDelay();
-    const index = MOCK_REPORTS.findIndex((r) => r.id === Number.parseInt(id));
+    const index = MOCK_REPORTS.findIndex((r) => r.id === parseInt(id));
     if (index !== -1) {
       MOCK_REPORTS[index] = { ...MOCK_REPORTS[index], ...report };
       return { success: true, data: MOCK_REPORTS[index] };

@@ -2,8 +2,8 @@ import express from "express";
 const router = express.Router();
 import { authenticateToken } from "./auth.js";
 import multer from "multer";
-import path from "node:path";
-import fs from "node:fs/promises";
+import path from "path";
+import fs from "fs/promises";
 
 // Configuración de multer para subida de archivos
 const storage = multer.diskStorage({
@@ -76,28 +76,28 @@ router.get("/", authenticateToken, (req, res) => {
     // Filtrar por proyecto
     if (projectId) {
       filteredFiles = filteredFiles.filter(
-        (f) => f.projectId === Number.parseInt(projectId, 10)
+        (f) => f.projectId === Number.parseInt(projectId)
       );
     }
 
     // Filtrar por usuario que subió
     if (uploadedBy) {
       filteredFiles = filteredFiles.filter(
-        (f) => f.uploadedBy === Number.parseInt(uploadedBy, 10)
+        (f) => f.uploadedBy === Number.parseInt(uploadedBy)
       );
     }
 
     // Paginación
-    const startIndex = (page - 1) * Number.parseInt(limit, 10);
-    const endIndex = startIndex + Number.parseInt(limit, 10);
+    const startIndex = (page - 1) * Number.parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedFiles = filteredFiles.slice(startIndex, endIndex);
 
     res.json({
       files: paginatedFiles,
       total: filteredFiles.length,
-      page: Number.parseInt(page, 10),
-      limit: Number.parseInt(limit, 10),
-      totalPages: Math.ceil(filteredFiles.length / Number.parseInt(limit, 10)),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
+      totalPages: Math.ceil(filteredFiles.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo archivos:", error);
@@ -147,7 +147,7 @@ router.post(
         mimetype: req.file.mimetype,
         size: req.file.size,
         path: `/uploads/${req.file.filename}`,
-        projectId: Number.parseInt(projectId, 10),
+        projectId: Number.parseInt(projectId),
         uploadedBy: req.user.id,
         uploadedAt: new Date(),
       };
@@ -168,7 +168,7 @@ router.post(
 // GET /api/files/:id/download - Descargar archivo
 router.get("/:id/download", authenticateToken, async (req, res) => {
   try {
-    const file = files.find((f) => f.id === Number.parseInt(req.params.id, 10));
+    const file = files.find((f) => f.id === parseInt(req.params.id));
     if (!file) {
       return res.status(404).json({ message: "Archivo no encontrado" });
     }
@@ -195,7 +195,7 @@ router.get("/:id/download", authenticateToken, async (req, res) => {
 router.delete("/:id", authenticateToken, async (req, res) => {
   try {
     const fileIndex = files.findIndex(
-      (f) => f.id === Number.parseInt(req.params.id, 10)
+      (f) => f.id === Number.parseInt(req.params.id)
     );
     if (fileIndex === -1) {
       return res.status(404).json({ message: "Archivo no encontrado" });
@@ -230,8 +230,8 @@ router.delete("/:id", authenticateToken, async (req, res) => {
 // GET /api/files/project/:projectId - Obtener archivos de un proyecto
 router.get("/project/:projectId", authenticateToken, (req, res) => {
   try {
-    const projectFiles = files.filter(
-      (f) => f.projectId === Number.parseInt(req.params.projectId, 10)
+    projectFiles = files.filter(
+      (f) => f.projectId === Number.parseInt(req.params.projectId)
     );
     res.json(projectFiles);
   } catch (error) {

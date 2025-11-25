@@ -52,30 +52,28 @@ router.get("/", (req, res) => {
     // Filtrar por año
     if (year) {
       filteredReports = filteredReports.filter(
-        (r) => r.year === Number.parseInt(year, 10)
+        (r) => r.year === Number.parseInt(year)
       );
     }
 
     // Filtrar por mes
     if (month) {
       filteredReports = filteredReports.filter(
-        (r) => r.month === Number.parseInt(month, 10)
+        (r) => r.month === Number.parseInt(month)
       );
     }
 
     // Paginación
-    const startIndex = (page - 1) * Number.parseInt(limit, 10);
-    const endIndex = startIndex + Number.parseInt(limit, 10);
+    const startIndex = (page - 1) * Number.parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedReports = filteredReports.slice(startIndex, endIndex);
 
     res.json({
       reports: paginatedReports,
       total: filteredReports.length,
-      page: Number.parseInt(page, 10),
-      limit: Number.parseInt(limit, 10),
-      totalPages: Math.ceil(
-        filteredReports.length / Number.parseInt(limit, 10)
-      ),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
+      totalPages: Math.ceil(filteredReports.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo reportes:", error);
@@ -86,9 +84,7 @@ router.get("/", (req, res) => {
 // GET /api/reports/:id - Obtener reporte por ID
 router.get("/:id", (req, res) => {
   try {
-    const report = reports.find(
-      (r) => r.id === Number.parseInt(req.params.id, 10)
-    );
+    const report = reports.find((r) => r.id === Number.parseInt(req.params.id));
     if (!report) {
       return res.status(404).json({ message: "Reporte no encontrado" });
     }
@@ -124,8 +120,8 @@ router.post("/", authenticateToken, (req, res) => {
       id: reports.length + 1,
       title,
       type,
-      year: Number.parseInt(year, 10),
-      month: month ? Number.parseInt(month, 10) : null,
+      year: Number.parseInt(year),
+      month: month ? Number.parseInt(month) : null,
       data,
       createdAt: new Date(),
       createdBy: req.user.id,
@@ -146,9 +142,7 @@ router.post("/", authenticateToken, (req, res) => {
 // PUT /api/reports/:id - Actualizar reporte
 router.put("/:id", authenticateToken, (req, res) => {
   try {
-    const report = reports.find(
-      (r) => r.id === Number.parseInt(req.params.id, 10)
-    );
+    const report = reports.find((r) => r.id === Number.parseInt(req.params.id));
     if (!report) {
       return res.status(404).json({ message: "Reporte no encontrado" });
     }
@@ -179,7 +173,7 @@ router.put("/:id", authenticateToken, (req, res) => {
 router.delete("/:id", authenticateToken, (req, res) => {
   try {
     const reportIndex = reports.findIndex(
-      (r) => r.id === Number.parseInt(req.params.id, 10)
+      (r) => r.id === Number.parseInt(req.params.id)
     );
     if (reportIndex === -1) {
       return res.status(404).json({ message: "Reporte no encontrado" });
@@ -225,8 +219,8 @@ router.get("/generate/:type", authenticateToken, (req, res) => {
 
     res.json({
       type,
-      year: year ? Number.parseInt(year, 10) : new Date().getFullYear(),
-      month: month ? Number.parseInt(month, 10) : null,
+      year: year ? Number.parseInt(year) : new Date().getFullYear(),
+      month: month ? Number.parseInt(month) : null,
       data: reportData,
     });
   } catch (error) {

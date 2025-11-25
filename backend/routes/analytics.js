@@ -51,7 +51,7 @@ router.get("/overview", authenticateToken, (req, res) => {
 // GET /api/analytics/trends - Tendencias
 router.get("/trends", authenticateToken, (req, res) => {
   try {
-    const { metric = "all" } = req.query;
+    const { period = "monthly", metric = "all" } = req.query;
 
     let data = analyticsData.trends;
 

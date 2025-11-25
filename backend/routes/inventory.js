@@ -189,9 +189,7 @@ router.post("/", authenticateToken, (req, res) => {
 // PUT /api/inventory/:id - Actualizar item
 router.put("/:id", authenticateToken, (req, res) => {
   try {
-    const item = inventory.find(
-      (i) => i.id === Number.parseInt(req.params.id, 10)
-    );
+    const item = inventory.find((i) => i.id === parseInt(req.params.id));
     if (!item) {
       return res
         .status(404)
@@ -209,40 +207,43 @@ router.put("/:id", authenticateToken, (req, res) => {
       supplier,
     } = req.body;
 
-    function validateNonNegative(val, fieldName) {
-      if (val < 0) {
-        res
-          .status(400)
-          .json({ message: `El valor de ${fieldName} no puede ser negativo` });
-        return false;
-      }
-      return true;
-    }
-
     if (name) item.name = name;
     if (category) item.category = category;
     if (description !== undefined) item.description = description;
 
     if (quantity !== undefined) {
-      if (!validateNonNegative(quantity, "cantidad")) return;
-      const quantityValue = Number.parseInt(quantity, 10);
-      item.quantity = quantityValue;
-      item.status = quantityValue > 0 ? "available" : "out_of_stock";
+      if (quantity < 0) {
+        return res
+          .status(400)
+          .json({ message: "La cantidad no puede ser negativa" });
+      }
+      item.quantity = Number.parseInt(quantity);
+      item.status =
+        Number.parseInt(quantity) > 0 ? "available" : "out_of_stock";
     }
 
     if (minQuantity !== undefined) {
-      if (!validateNonNegative(minQuantity, "cantidad mínima")) return;
-      item.minQuantity = Number.parseInt(minQuantity, 10);
+      if (minQuantity < 0) {
+        return res
+          .status(400)
+          .json({ message: "La cantidad mínima no puede ser negativa" });
+      }
+      item.minQuantity = Number.parseInt(minQuantity);
     }
 
     if (unitCost !== undefined) {
-      if (!validateNonNegative(unitCost, "costo unitario")) return;
+      if (unitCost < 0) {
+        return res
+          .status(400)
+          .json({ message: "El costo unitario no puede ser negativo" });
+      }
       item.unitCost = Number.parseFloat(unitCost);
     }
 
     if (location) item.location = location;
     if (supplier) item.supplier = supplier;
 
+    // Recalcular valor total
     item.totalValue = item.quantity * item.unitCost;
     item.lastUpdated = new Date();
 

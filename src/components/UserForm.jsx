@@ -267,12 +267,9 @@ const UserForm = ({ onSubmit, onCancel, initialData = null }) => {
           >
             {loading
               ? "Guardando..."
-              : (() => {
-                  if (initialData) {
-                    return "Actualizar";
-                  }
-                  return "Crear Usuario";
-                })()}
+              : initialData
+              ? "Actualizar"
+              : "Crear Usuario"}
           </button>
         </div>
       </form>

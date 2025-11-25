@@ -67,7 +67,7 @@ router.get("/", authenticateToken, (req, res) => {
     // Filtrar por usuario
     if (userId) {
       filteredLogs = filteredLogs.filter(
-        (log) => log.userId === Number.parseInt(userId, 10)
+        (log) => log.userId === Number.parseInt(userId)
       );
     }
 
@@ -100,17 +100,16 @@ router.get("/", authenticateToken, (req, res) => {
     filteredLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     // Paginación
-    const startIndex =
-      (Number.parseInt(page, 10) - 1) * Number.parseInt(limit, 10);
-    const endIndex = startIndex + Number.parseInt(limit, 10);
+    const startIndex = (page - 1) * Number.parseInt(limit);
+    const endIndex = startIndex + Number.parseInt(limit);
     const paginatedLogs = filteredLogs.slice(startIndex, endIndex);
 
     res.json({
       logs: paginatedLogs,
       total: filteredLogs.length,
-      page: Number.parseInt(page, 10),
-      limit: Number.parseInt(limit, 10),
-      totalPages: Math.ceil(filteredLogs.length / Number.parseInt(limit, 10)),
+      page: Number.parseInt(page),
+      limit: Number.parseInt(limit),
+      totalPages: Math.ceil(filteredLogs.length / Number.parseInt(limit)),
     });
   } catch (error) {
     console.error("Error obteniendo logs de auditoría:", error);
@@ -127,9 +126,7 @@ router.get("/:id", authenticateToken, (req, res) => {
         .json({ message: "Solo administradores pueden ver logs de auditoría" });
     }
 
-    const log = auditLogs.find(
-      (l) => l.id === Number.parseInt(req.params.id, 10)
-    );
+    const log = auditLogs.find((l) => l.id === Number.parseInt(req.params.id));
     if (!log) {
       return res
         .status(404)
@@ -184,7 +181,7 @@ router.get("/user/:userId", authenticateToken, (req, res) => {
   try {
     if (
       req.user.role !== "admin" &&
-      req.user.id !== Number.parseInt(req.params.userId, 10)
+      req.user.id !== Number.parseInt(req.params.userId)
     ) {
       return res
         .status(403)
@@ -192,7 +189,7 @@ router.get("/user/:userId", authenticateToken, (req, res) => {
     }
 
     const userLogs = auditLogs.filter(
-      (log) => log.userId === Number.parseInt(req.params.userId, 10)
+      (log) => log.userId === Number.parseInt(req.params.userId)
     );
 
     // Ordenar por timestamp descendente
@@ -246,7 +243,7 @@ router.delete("/:id", authenticateToken, (req, res) => {
     }
 
     const logIndex = auditLogs.findIndex(
-      (l) => l.id === Number.parseInt(req.params.id, 10)
+      (l) => l.id === parseInt(req.params.id)
     );
     if (logIndex === -1) {
       return res
@@ -259,26 +256,6 @@ router.delete("/:id", authenticateToken, (req, res) => {
     res.json({ message: "Log de auditoría eliminado exitosamente" });
   } catch (error) {
     console.error("Error eliminando log de auditoría:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
-  }
-});
-
-// GET /api/audit/trends - Obtener tendencias (solo admin)
-router.get("/trends", authenticateToken, (req, res) => {
-  try {
-    const { metric = "all" } = req.query;
-
-    let data = analyticsData.trends;
-
-    if (metric === "projects") {
-      data = { projectsByMonth: analyticsData.trends.projectsByMonth };
-    } else if (metric === "budget") {
-      data = { budgetByMonth: analyticsData.trends.budgetByMonth };
-    }
-
-    res.json(data);
-  } catch (error) {
-    console.error("Error obteniendo tendencias:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 });

@@ -266,7 +266,7 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
 
             {formData.items.map((item, idx) => (
               <div
-                key={item.concepto ?? idx}
+                key={idx}
                 className="border rounded p-3 grid grid-cols-6 gap-2 items-end"
               >
                 <div className="col-span-2">
@@ -370,14 +370,7 @@ const BudgetForm = ({ onSubmit, onCancel, initialData = null }) => {
             className="px-4 py-2 rounded bg-blue-600 text-white"
             disabled={loading}
           >
-            {loading
-              ? "Guardando..."
-              : (() => {
-                  if (initialData) {
-                    return "Actualizar";
-                  }
-                  return "Crear";
-                })()}
+            {loading ? "Guardando..." : initialData ? "Actualizar" : "Crear"}
           </button>
         </div>
       </form>

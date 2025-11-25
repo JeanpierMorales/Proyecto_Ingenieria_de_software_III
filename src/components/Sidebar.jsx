@@ -10,7 +10,8 @@ import {
   Target,
   Receipt,
 } from "lucide-react";
-import { useAuth, usePermissions } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
+import { usePermissions } from "../hooks/useAuth";
 
 const Sidebar = () => {
   const { user } = useAuth();
